@@ -1,24 +1,19 @@
-NAME		=	fast-chess
-FLAGS		= 	-std=c++17 -Wextra -lX11 -lGL -lpthread -lpng -lstdc++fs
-COMPILER	=	g++
+NAME = fast-chess
+FLAGS = -std=c++17 -Wextra -lX11 -lGL -lpthread -lpng -lstdc++fs
+COMPILER = g++
 
-DIR_INC		=	./inc/
-DIR_SRC		=	./src/
-DIR_OBJ		= 	./obj/
+DIR_INC = ./inc/
+DIR_SRC	= ./src/
+DIR_OBJ	= ./obj/
 
-HEAD_MD	=		olcPixelGameEngine.h \
-				ChessInterface.h \
-				Board.h \
-				Piece.h
+HEAD_MD	= olcPixelGameEngine.h ChessInterface.h Board.h Piece.h
 
-SRC_MD		=	main.cpp \
-			Board.cpp \
-			ChessInterface.cpp
+SRC_MD = main.cpp Board.cpp ChessInterface.cpp
 
-INC_PATH 	= 	$(addprefix $(DIR_INC), $(HEAD_MD))
+INC_PATH = $(addprefix $(DIR_INC), $(HEAD_MD))
 
-OBJ 		= 	$(addprefix $(DIR_OBJ), $(SRC_MD:.cpp=.o))
-INC 		= 	$(addprefix -I, $(DIR_INC))
+OBJ = $(addprefix $(DIR_OBJ), $(SRC_MD:.cpp=.o))
+INC = $(addprefix -I, $(DIR_INC))
 
 .PHONY: all obj $(NAME) clean fclean re
 
