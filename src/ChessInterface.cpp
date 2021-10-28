@@ -1,11 +1,15 @@
+#include <string>
+#include <iostream>
 #include "ChessInterface.h"
 #include "Piece.h"
+#include "Board.h"
 
-auto cellSize = CI_SCREEN_H / 8;
+std::string initial_pos = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
 ChessInterface::ChessInterface(const char *window_name)
 {
     sAppName = window_name;
+    board.loadFEN(initial_pos);
 }
 
 bool    ChessInterface::OnUserCreate()
@@ -18,7 +22,13 @@ bool    ChessInterface::OnUserCreate()
 
     for (int x = 0; x < 8; x++)
         for (int y = 0; y < 8; y++)
-            FillRect(x * cellSize, y * cellSize, cellSize, cellSize, ((x + y) % 2 ? black : white));
+            FillRect(
+                x * CELL_SIZE,
+                y * CELL_SIZE,
+                CELL_SIZE,
+                CELL_SIZE,
+                ((x + y) % 2 ? black : white)
+            );
 
     EnableLayer(boardLayer, true);
     SetDrawTarget(nullptr);
@@ -34,43 +44,31 @@ bool    ChessInterface::OnUserCreate()
 }
 
 
-void    ChessInterface::DrawPiece(int row, int column, int piece, float pieceScaling) {
-    DrawDecal(
-        {float(column)* float(cellSize), float(row) * float(cellSize)},
-        pieceDecals[piece],
-        {pieceScaling, pieceScaling}
-    );
+void    ChessInterface::DrawPiece(int row, int column, uint8_t piece) {
+    if (
+        piece != (Piece::Type::UNSET | Piece::Color::BLACK)
+        && piece != (Piece::Type::UNSET | Piece::Color::WHITE)
+    ) {
+        DrawDecal(
+            {float(column)* float(CELL_SIZE), float(row) * float(CELL_SIZE)},
+            pieceDecals[piece],
+            {pieceScaling, pieceScaling}
+        );
+    }
+}
+
+void    ChessInterface::DrawBoard() {
+    for (uint8_t x = 0 ; x < 8 ; x++)
+        for (uint8_t y = 0 ; y < 8 ; y++)
+            DrawPiece(x, y, board.get(y, x));
 }
 
 
 bool    ChessInterface::OnUserUpdate(float fElapsedTime)
 {
-    auto pieceScaling = ScreenHeight() / 8 / pieceSize;
-
     Clear(olc::BLANK);
 
-    DrawPiece(0, 0, Piece::Type::ROOK | Piece::Color::BLACK, pieceScaling);
-    DrawPiece(0, 1, Piece::Type::KNIGHT | Piece::Color::BLACK, pieceScaling);
-    DrawPiece(0, 2, Piece::Type::BISHOP | Piece::Color::BLACK, pieceScaling);
-    DrawPiece(0, 3, Piece::Type::QUEEN | Piece::Color::BLACK, pieceScaling);
-    DrawPiece(0, 4, Piece::Type::KING | Piece::Color::BLACK, pieceScaling);
-    DrawPiece(0, 5, Piece::Type::BISHOP | Piece::Color::BLACK, pieceScaling);
-    DrawPiece(0, 6, Piece::Type::KNIGHT | Piece::Color::BLACK, pieceScaling);
-    DrawPiece(0, 7, Piece::Type::ROOK | Piece::Color::BLACK, pieceScaling);
-
-    DrawPiece(7, 0, Piece::Type::ROOK | Piece::Color::WHITE, pieceScaling);
-    DrawPiece(7, 1, Piece::Type::KNIGHT | Piece::Color::WHITE, pieceScaling);
-    DrawPiece(7, 2, Piece::Type::BISHOP | Piece::Color::WHITE, pieceScaling);
-    DrawPiece(7, 3, Piece::Type::QUEEN | Piece::Color::WHITE, pieceScaling);
-    DrawPiece(7, 4, Piece::Type::KING | Piece::Color::WHITE, pieceScaling);
-    DrawPiece(7, 5, Piece::Type::BISHOP | Piece::Color::WHITE, pieceScaling);
-    DrawPiece(7, 6, Piece::Type::KNIGHT | Piece::Color::WHITE, pieceScaling);
-    DrawPiece(7, 7, Piece::Type::ROOK | Piece::Color::WHITE, pieceScaling);
-
-    for (int x = 0 ; x < 8 ; x++) {
-        DrawPiece(1, x, Piece::Type::PAWN | Piece::Color::BLACK, pieceScaling);
-        DrawPiece(6, x, Piece::Type::PAWN | Piece::Color::WHITE, pieceScaling);
-    }
+    DrawBoard();
 
     SetDrawTarget(nullptr);
 
@@ -119,6 +117,7 @@ bool    ChessInterface::loadAssets()
     pieceDecals[Piece::Type::KING | Piece::Color::BLACK] = new olc::Decal(sprite);
 
     pieceSize = pieceDecals[Piece::Type::QUEEN | Piece::Color::WHITE]->sprite->height;
+    pieceScaling = ScreenHeight() / 8 / pieceSize;
 
     return true;
 }

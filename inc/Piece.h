@@ -6,12 +6,13 @@ class Piece
 
         enum Type
         {
-            PAWN = 0,
-            BISHOP = 1,
-            KNIGHT = 2,
-            ROOK = 3,
-            QUEEN = 4,
-            KING = 5,
+            UNSET = 0,
+            PAWN = 1,
+            BISHOP = 2,
+            KNIGHT = 3,
+            ROOK = 4,
+            QUEEN = 5,
+            KING = 6,
         };
 
         enum Color
