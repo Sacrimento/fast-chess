@@ -11,14 +11,15 @@ class ChessInterface : public olc::PixelGameEngine
         int     boardLayer;
         int     pieceLayer;
         float   pieceSize;
-        
+
         std::map<uint8_t, olc::Decal *> pieceDecals;
 
     public:
         ChessInterface(const char *window_name);
-        
+
         bool OnUserCreate() override;
         bool OnUserUpdate(float fElapsedTime) override;
+        void DrawPiece(int row, int column, int piece, float pieceScaling);
 
         bool loadAssets();
 };

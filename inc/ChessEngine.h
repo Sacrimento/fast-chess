@@ -10,5 +10,4 @@ class ChessEngine
     public:
         ChessEngine() {}
         ~ChessEngine() {}
-    
 };
