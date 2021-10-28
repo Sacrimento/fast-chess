@@ -9,8 +9,8 @@ ChessInterface::ChessInterface(const char *window_name)
 bool    ChessInterface::OnUserCreate()
 {
     auto cellSize = CI_SCREEN_H / 8;
-    auto black = olc::Pixel(54, 31, 10);
-    auto white = olc::Pixel(201, 177, 135);
+    auto black = olc::Pixel(179, 92, 45);
+    auto white = olc::Pixel(255, 223, 186);
 
 	boardLayer = CreateLayer();
 	SetDrawTarget(boardLayer);
