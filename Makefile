@@ -6,9 +6,9 @@ DIR_INC = ./inc/
 DIR_SRC	= ./src/
 DIR_OBJ	= ./obj/
 
-HEAD_MD	= olcPixelGameEngine.h ChessInterface.h Board.h Piece.h
+HEAD_MD	= olcPixelGameEngine.h ChessInterface.h Piece.h ChessInterface.h fen.h Pawn.h
 
-SRC_MD = main.cpp Board.cpp ChessInterface.cpp
+SRC_MD = main.cpp ChessInterface.cpp ChessEngine.cpp fen.cpp Pawn.cpp Bishop.cpp Knight.cpp Rook.cpp Queen.cpp King.cpp
 
 INC_PATH = $(addprefix $(DIR_INC), $(HEAD_MD))
 

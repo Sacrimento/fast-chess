@@ -4,8 +4,16 @@
 
 int main()
 {
+
+
+	ChessEngine *engine = new ChessEngine();
 	ChessInterface chess("Fast Chess");
-	if (chess.Construct(1280, 720, 1, 1))
+
+
+	chess.setEngine(engine);
+	if (chess.Construct(CI_SCREEN_W, CI_SCREEN_H, 1, 1))
 		chess.Start();
+
+	delete engine;
 	return 0;
 }
