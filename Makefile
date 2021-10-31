@@ -2,36 +2,40 @@ NAME = fast-chess
 FLAGS = -std=c++17 -Wextra -lX11 -lGL -lpthread -lpng -lstdc++fs
 COMPILER = g++
 
-DIR_INC = ./inc/
-DIR_SRC	= ./src/
-DIR_OBJ	= ./obj/
+SRC_SUBDIRS =	engine \
+				engine/pieces \
+				interface \
 
-HEAD_MD	= olcPixelGameEngine.h ChessInterface.h Piece.h ChessInterface.h fen.h Pawn.h
+SRC_DIR = $(addprefix sources/, $(SRC_SUBDIRS))
+DIR_OBJ	= $(addprefix obj/, $(SRC_SUBDIRS))
 
-SRC_MD = main.cpp ChessInterface.cpp ChessEngine.cpp fen.cpp Pawn.cpp Bishop.cpp Knight.cpp Rook.cpp Queen.cpp King.cpp
+SRC =	$(foreach dir, $(SRC_DIR), $(wildcard $(dir)/*.cpp))
+INC =	$(addprefix	-I, $(SRC_DIR))
+OBJ =	$(patsubst sources/%.cpp, obj/%.o, $(SRC))
 
-INC_PATH = $(addprefix $(DIR_INC), $(HEAD_MD))
+vpath %.cpp $(SRC_DIR)
 
-OBJ = $(addprefix $(DIR_OBJ), $(SRC_MD:.cpp=.o))
-INC = $(addprefix -I, $(DIR_INC))
+define make-rule
+$1/%.o: %.cpp
+	$(COMPILER) $(FLAGS) $(INC) -c $$< -o $$@
+endef
 
 .PHONY: all obj $(NAME) clean fclean re
 
-all: obj $(NAME)
+all: $(DIR_OBJ) $(NAME)
 
-obj:
-	@mkdir -p $(DIR_OBJ)
+$(DIR_OBJ):
+	@mkdir -p $@
 
 $(NAME): $(OBJ)
 	@$(COMPILER) -o $(NAME) $(OBJ) $(FLAGS)
 
-$(DIR_OBJ)%.o: $(DIR_SRC)%.cpp $(INC_PATH)
-	$(COMPILER) $(FLAGS) $(INC) -c -o $@ $<
-
 clean:
-	@rm -rf $(DIR_OBJ)
+	@rm -rf obj/
 
 fclean: clean
 	@rm -f $(NAME)
 
 re: fclean all
+
+$(foreach bdir,$(DIR_OBJ),$(eval $(call make-rule,$(bdir))))
