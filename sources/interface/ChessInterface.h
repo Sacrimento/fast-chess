@@ -27,6 +27,8 @@ class ChessInterface : public olc::PixelGameEngine
 
         bool OnUserCreate() override;
         bool OnUserUpdate(float fElapsedTime) override;
+        bool OnUserDestroy() override;
+
         void drawBoard();
         void drawPiece(Piece::pos2d pos, uint8_t piece);
 

@@ -38,17 +38,11 @@ bool    ChessInterface::OnUserCreate()
 
 
 void    ChessInterface::drawPiece(Piece::pos2d pos, uint8_t piece) {
-    if (
-        piece != (Piece::Type::UNSET | Piece::Color::BLACK)
-        && piece != (Piece::Type::UNSET | Piece::Color::WHITE)
-    ) 
-    {
         DrawDecal(
             {float(pos.x) * float(CELL_SIZE), float(pos.y) * float(CELL_SIZE)},
             pieceDecals[piece],
             {pieceScaling, pieceScaling}
         );
-    }
 }
 
 void    ChessInterface::drawBoard() {
@@ -65,6 +59,16 @@ bool    ChessInterface::OnUserUpdate(float fElapsedTime)
 
     SetDrawTarget(nullptr);
 
+    return true;
+}
+
+bool    ChessInterface::OnUserDestroy()
+{
+    for (auto d: pieceDecals)
+    {
+        delete d.second->sprite;
+        delete d.second;
+    }
     return true;
 }
 
