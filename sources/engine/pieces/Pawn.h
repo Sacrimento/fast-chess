@@ -11,7 +11,7 @@ class Pawn : public Piece
 
         virtual std::list<pos2d> getMoves(ChessEngine *engine);
         void    move(pos2d move);
-    
+
     private:
         bool    hasMoved = false;
 };
