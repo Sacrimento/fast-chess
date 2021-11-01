@@ -7,7 +7,7 @@ bool    FEN::isChessPiece(char &c) {
 std::list<Piece *>  FEN::load(std::string fen)
 {
     //TODO: Check for user input because user is evil
-    uint8_t row = 0, column = 0, nb_spaces = 0;
+    uint8_t row = 0, column = 0, nbSpaces = 0;
 
     std::list<Piece *> pieces;
 
@@ -21,10 +21,10 @@ std::list<Piece *>  FEN::load(std::string fen)
         else if (std::isdigit(c))
             column += (int(c) - 48);
         else if (c == ' ') {
-            if (nb_spaces == 0)
+            if (nbSpaces == 0)
                 // Player turn : 'w' = white / 'b' = black
                 {;}
-            else if (nb_spaces == 1)
+            else if (nbSpaces == 1)
                 /*
                  *  Possibles rocks:
                  *  K = White rock from king side
@@ -33,23 +33,23 @@ std::list<Piece *>  FEN::load(std::string fen)
                  *  q = Black rock from queen side
                  */
                 {;}
-            else if (nb_spaces == 2)
+            else if (nbSpaces == 2)
                 // Possible en passant
                 {;}
-            else if (nb_spaces == 3)
+            else if (nbSpaces == 3)
                 // Half moves??
                 {;}
-            else if (nb_spaces == 4)
+            else if (nbSpaces == 4)
                 // Full moves
                 {;}
-            ++nb_spaces;
+            ++nbSpaces;
         }
-        else if (FEN::isChessPiece(c) && !nb_spaces) {
+        else if (FEN::isChessPiece(c) && !nbSpaces) {
             pieces.push_back(
                 ChessEngine::create_piece(
                     pieceMap.at(std::tolower(c)),
                     (std::isupper(c) ? Piece::Color::WHITE : Piece::Color::BLACK),
-                    {column, row} 
+                    {column, row}
                 )
             );
             ++column;

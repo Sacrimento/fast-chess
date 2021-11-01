@@ -2,12 +2,12 @@
 
 ChessEngine::ChessEngine()
 {
-    load_FEN(initial_pos);
+    loadFEN(initial_pos);
 }
 
 ChessEngine::ChessEngine(const char *fen)
 {
-    load_FEN(fen);
+    loadFEN(fen);
 }
 
 ChessEngine::~ChessEngine()
@@ -71,7 +71,7 @@ void    ChessEngine::move(Piece *piece, Piece::pos2d pos)
 
 }
 
-void ChessEngine::load_FEN(std::string fen)
+void ChessEngine::loadFEN(std::string fen)
 {
     cleanup();
     pieces = FEN::load(fen);
