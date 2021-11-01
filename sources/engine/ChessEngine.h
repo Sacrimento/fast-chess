@@ -2,6 +2,8 @@
 
 #include <string>
 #include <list>
+#include <algorithm>
+#include <utility>
 
 #include "Piece.h"
 #include "Pawn.h"
@@ -20,7 +22,7 @@ class ChessEngine
 
         void cleanup();
 
-        Piece::pos2d    lastMove = {-1, -1};
+        std::pair<Piece *, Piece::pos2d>    lastMove = {nullptr, {-1, -1}};
 
     public:
         ChessEngine();

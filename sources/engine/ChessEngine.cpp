@@ -49,18 +49,10 @@ void    ChessEngine::move(Piece *piece, Piece::pos2d pos)
 {
     auto target = getPieceFromPos(pos);
     auto moves = piece->getMoves(this);
-    bool authorized = false;
 
-    for (auto mv : moves) {
-        if (mv == pos) {
-            authorized = true;
-            break;
-        }
-    }
-
-    if (!authorized) return;
-
-    // Check if move is legal, can capture, etc
+    if (std::find_if(moves.cbegin(), moves.cend(),
+        [pos] (const Piece::pos2d &p) { return p == pos; }) == moves.end())
+        return;
 
     if (target) {
         pieces.remove(target);
@@ -68,7 +60,8 @@ void    ChessEngine::move(Piece *piece, Piece::pos2d pos)
     }
 
     piece->move(pos);
-
+    lastMove.first = piece;
+    lastMove.second = pos;
 }
 
 void ChessEngine::loadFEN(std::string fen)

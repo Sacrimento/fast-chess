@@ -14,4 +14,6 @@ class Pawn : public Piece
     
     private:
         bool    hasMoved = false;
+
+        void    checkEnPassant();
 };
