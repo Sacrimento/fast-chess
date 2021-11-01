@@ -37,17 +37,27 @@ bool    ChessInterface::OnUserCreate()
 }
 
 
-void    ChessInterface::drawPiece(Piece::pos2d pos, uint8_t piece) {
-        DrawDecal(
-            {float(pos.x) * float(CELL_SIZE), float(pos.y) * float(CELL_SIZE)},
-            pieceDecals[piece],
-            {pieceScaling, pieceScaling}
-        );
-}
-
-void    ChessInterface::drawBoard() {
+void    ChessInterface::drawPieces() {
     for (auto p : engine->pieces)
-        drawPiece(p->getPos(), p->getPieceRepresentation());
+    {
+        if (p == selectedPiece)
+        {
+            DrawDecal(
+                {MAX_BOARD(GetMouseX() - pieceSize * pieceScaling / 2), MAX_BOARD(GetMouseY() - pieceSize * pieceScaling / 2)},
+                pieceDecals[p->getPieceRepresentation()],
+                {pieceScaling, pieceScaling}
+            );
+        }
+        else
+        {
+            auto pos = p->getPos();
+            DrawDecal(
+                {float(pos.x) * float(CELL_SIZE), float(pos.y) * float(CELL_SIZE)},
+                pieceDecals[p->getPieceRepresentation()],
+                {pieceScaling, pieceScaling}
+            );
+        }
+    }
 }
 
 
@@ -55,7 +65,10 @@ bool    ChessInterface::OnUserUpdate(float fElapsedTime)
 {
     Clear(olc::BLANK);
 
-    drawBoard();
+    if (!handleUserInput())
+        return false;
+
+    drawPieces();
 
     SetDrawTarget(nullptr);
 
@@ -70,6 +83,32 @@ bool    ChessInterface::OnUserDestroy()
         delete d.second;
     }
     return true;
+}
+
+bool    ChessInterface::handleUserInput()
+{
+    auto cell = getCellFromMouse(GetMousePos());
+
+    if (GetMouse(0).bPressed)
+        selectedPiece = engine->getPieceFromPos({(uint8_t)cell.x, (uint8_t)cell.y});
+    else if (GetMouse(0).bReleased)
+    {
+        if (cell.x > 7 || cell.y > 7)
+        {
+            selectedPiece = nullptr;
+            return true;
+        }
+        if (selectedPiece)
+            engine->move(selectedPiece, {(uint8_t)cell.x, (uint8_t)cell.y});
+        selectedPiece = nullptr;
+    }
+
+    return true;
+}
+
+olc::vi2d   ChessInterface::getCellFromMouse(const olc::vi2d mousePos)
+{
+    return mousePos / CELL_SIZE;
 }
 
 bool    ChessInterface::loadAssets()

@@ -37,8 +37,39 @@ Piece *ChessEngine::create_piece(Piece::Type type, Piece::Color color, Piece::po
     }
 }
 
+Piece   *ChessEngine::getPieceFromPos(Piece::pos2d pos)
+{
+    for (auto p: pieces)
+        if (p->getPos() == pos)
+            return p;
+    return nullptr;
+}
+
+void    ChessEngine::move(Piece *piece, Piece::pos2d pos)
+{
+    auto target = getPieceFromPos(pos);
+
+    // Check if move is legal, can capture, etc
+
+    if (target)
+    {
+        if (piece == target || piece->getColor() == target->getColor())
+            return;
+        pieces.remove(target);
+        delete target;
+    }
+
+    piece->setPos(pos);
+
+}
+
 void ChessEngine::load_FEN(std::string fen)
 {
     cleanup();
     pieces = FEN::load(fen);
+}
+
+bool    operator==(const Piece::pos2d &lhs, const Piece::pos2d &rhs)
+{
+    return lhs.x == rhs.x && lhs.y == rhs.y;
 }

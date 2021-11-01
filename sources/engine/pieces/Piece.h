@@ -1,4 +1,4 @@
-# pragma once
+#pragma once
 
 #include <cstdint>
 
@@ -29,12 +29,15 @@ class Piece
             uint8_t y;
         };
 
+
         Piece(Color c, pos2d p) : color(c), pos(p) {}
         virtual ~Piece() {}
 
         virtual int get_moves() = 0;
 
         pos2d   getPos() { return pos; }
+        void    setPos(pos2d &p) { pos = p; }
+        uint8_t getColor() { return color; }
         uint8_t getPieceRepresentation() { return type | color; }
 
     protected:
@@ -42,3 +45,5 @@ class Piece
         Type    type;
         Color   color;
 };
+
+bool    operator==(const Piece::pos2d &lhs, const Piece::pos2d &rhs);

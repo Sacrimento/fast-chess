@@ -27,6 +27,10 @@ class ChessEngine
 
         std::list<Piece *> pieces;
 
+        Piece   *getPieceFromPos(Piece::pos2d pos);
+
+        void move(Piece *piece, Piece::pos2d pos);
+
         void load_FEN(std::string fen);
         static Piece *create_piece(Piece::Type type, Piece::Color color, Piece::pos2d pos);
 };
