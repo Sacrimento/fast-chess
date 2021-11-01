@@ -43,7 +43,10 @@ void    ChessInterface::drawPieces() {
         if (p == selectedPiece)
         {
             DrawDecal(
-                {MAX_BOARD(GetMouseX() - pieceSize * pieceScaling / 2), MAX_BOARD(GetMouseY() - pieceSize * pieceScaling / 2)},
+                {
+                    MAX_BOARD(GetMouseX()) - pieceSize * pieceScaling / 2,
+                    MAX_BOARD(GetMouseY()) - pieceSize * pieceScaling / 2
+                },
                 pieceDecals[p->getPieceRepresentation()],
                 {pieceScaling, pieceScaling}
             );

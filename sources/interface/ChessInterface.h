@@ -30,12 +30,12 @@ class ChessInterface : public olc::PixelGameEngine
         bool    OnUserDestroy() override;
 
         bool    loadAssets();
-    
+
         bool    handleUserInput();
         olc::vi2d   getCellFromMouse(const olc::vi2d mousePos);
 
         void drawPieces();
-    
+
     public:
         ChessInterface(const char *window_name);
 
