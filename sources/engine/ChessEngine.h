@@ -33,6 +33,6 @@ class ChessEngine
 
         void move(Piece *piece, Piece::pos2d pos);
 
-        void load_FEN(std::string fen);
+        void loadFEN(std::string fen);
         static Piece *create_piece(Piece::Type type, Piece::Color color, Piece::pos2d pos);
 };

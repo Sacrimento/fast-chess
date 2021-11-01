@@ -1,9 +1,9 @@
 #include "ChessInterface.h"
 #include <iostream>
 
-ChessInterface::ChessInterface(const char *window_name)
+ChessInterface::ChessInterface(const char *windowName)
 {
-    sAppName = window_name;
+    sAppName = windowName;
 }
 
 bool    ChessInterface::OnUserCreate()
