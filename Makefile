@@ -2,9 +2,7 @@ NAME = fast-chess
 FLAGS = -std=c++17 -Wextra -lX11 -lGL -lpthread -lpng -lstdc++fs
 COMPILER = g++
 
-SRC_SUBDIRS =	engine \
-				engine/pieces \
-				interface \
+SRC_SUBDIRS = engine engine/pieces interface
 
 SRC_DIR = $(addprefix sources/, $(SRC_SUBDIRS))
 DIR_OBJ	= $(addprefix obj/, $(SRC_SUBDIRS))

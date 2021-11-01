@@ -40,6 +40,7 @@ class Piece
         virtual std::list<pos2d> getMoves(ChessEngine *engine) = 0;
         pos2d   getPos() { return pos; }
         uint8_t getColor() { return color; }
+        uint8_t getType() { return type; }
         uint8_t getPieceRepresentation() { return type | color; }
 
 
@@ -50,7 +51,8 @@ class Piece
         Type    type;
         Color   color;
 
-        bool    isMoveOnBoard(int8_t x, int8_t y) { return (pos.x + x < 8 && pos.x + x >= 0 && pos.y + y < 8 && pos.y + y >= 0); }
+        bool    isMoveOnBoard(int8_t x, int8_t y);
+        bool    isMoveLegal(ChessEngine *engine, int8_t x, int8_t y);
 };
 
 bool    operator==(const Piece::pos2d &lhs, const Piece::pos2d &rhs);

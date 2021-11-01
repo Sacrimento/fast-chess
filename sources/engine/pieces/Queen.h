@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Piece.h"
+#include "ChessEngine.h"
 
 class Queen : public Piece
 {
