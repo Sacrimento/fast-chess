@@ -52,6 +52,7 @@ class Piece
         Color   color;
 
         bool    isMoveOnBoard(int8_t x, int8_t y);
+        virtual bool canCapture(Piece *p);
         bool    isMoveLegal(ChessEngine *engine, int8_t x, int8_t y);
 };
 

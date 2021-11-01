@@ -9,6 +9,7 @@ class Pawn : public Piece
         Pawn(Color c, pos2d pos) : Piece(c, pos) { type = Type::PAWN; }
         ~Pawn() {}
 
+        virtual bool canCapture(Piece *p) override;
         virtual std::list<pos2d> getMoves(ChessEngine *engine);
         void    move(pos2d move);
 

@@ -8,13 +8,17 @@ bool    Piece::isMoveOnBoard(int8_t x, int8_t y) {
     );
 }
 
+bool    Piece::canCapture(Piece *p) {
+    return p->getType() != Piece::Type::KING && p->getColor() != color;
+}
+
 bool    Piece::isMoveLegal(ChessEngine *engine, int8_t x, int8_t y) {
     if (!isMoveOnBoard(x, y))
         return false;
 
     Piece *p = engine->getPieceFromPos({pos.x + x, pos.y + y});
     if (p)
-        return p->getType() != Piece::Type::KING;
+        return canCapture(p);
 
     return true;
 }
