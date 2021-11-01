@@ -29,8 +29,8 @@ class Piece
 
         struct pos2d
         {
-            uint8_t x;
-            uint8_t y;
+            int8_t x;
+            int8_t y;
         };
 
 
@@ -42,12 +42,15 @@ class Piece
         uint8_t getColor() { return color; }
         uint8_t getPieceRepresentation() { return type | color; }
 
+
         virtual void    move(pos2d move) { pos = move; }
 
     protected:
         pos2d   pos;
         Type    type;
         Color   color;
+
+        bool    isMoveOnBoard(int8_t x, int8_t y) { return (pos.x + x < 8 && pos.x + x >= 0 && pos.y + y < 8 && pos.y + y >= 0); }
 };
 
 bool    operator==(const Piece::pos2d &lhs, const Piece::pos2d &rhs);

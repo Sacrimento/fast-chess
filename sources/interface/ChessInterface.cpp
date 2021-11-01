@@ -94,7 +94,7 @@ bool    ChessInterface::handleUserInput()
     auto cell = getCellFromMouse(GetMousePos());
 
     if (GetMouse(0).bPressed)
-        selectedPiece = engine->getPieceFromPos({(uint8_t)cell.x, (uint8_t)cell.y});
+        selectedPiece = engine->getPieceFromPos({(int8_t)cell.x, (int8_t)cell.y});
     else if (GetMouse(0).bReleased)
     {
         if (cell.x > 7 || cell.y > 7)
@@ -103,7 +103,7 @@ bool    ChessInterface::handleUserInput()
             return true;
         }
         if (selectedPiece)
-            engine->move(selectedPiece, {(uint8_t)cell.x, (uint8_t)cell.y});
+            engine->move(selectedPiece, {(int8_t)cell.x, (int8_t)cell.y});
         selectedPiece = nullptr;
     }
 

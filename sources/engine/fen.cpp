@@ -7,7 +7,7 @@ bool    FEN::isChessPiece(char &c) {
 std::list<Piece *>  FEN::load(std::string fen)
 {
     //TODO: Check for user input because user is evil
-    uint8_t row = 0, column = 0, nb_spaces = 0;
+    int8_t row = 0, column = 0, nb_spaces = 0;
 
     std::list<Piece *> pieces;
 

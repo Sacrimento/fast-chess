@@ -20,6 +20,8 @@ class ChessEngine
 
         void cleanup();
 
+        Piece::pos2d    lastMove = {-1, -1};
+
     public:
         ChessEngine();
         ChessEngine(const char *fen);

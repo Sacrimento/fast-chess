@@ -10,7 +10,6 @@ class Pawn : public Piece
         ~Pawn() {}
 
         virtual std::list<pos2d> getMoves(ChessEngine *engine);
-        bool    isMoveLegal(int tx, int ty);
         void    move(pos2d move);
     
     private:
