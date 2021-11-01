@@ -1,6 +1,12 @@
 #include "King.h"
 
-int King::get_moves()
+std::list<Piece::pos2d>    King::getMoves(ChessEngine *engine)
 {
-    return 1;
+    return std::list<Piece::pos2d>{};
+}
+
+void    King::move(pos2d move)
+{
+    pos = move;
+    canCastle = false;
 }

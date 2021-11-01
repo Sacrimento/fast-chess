@@ -1,6 +1,6 @@
 #include "Queen.h"
 
-int Queen::get_moves()
+std::list<Piece::pos2d>    Queen::getMoves(ChessEngine *engine)
 {
-    return 1;
+    return std::list<Piece::pos2d>{};
 }

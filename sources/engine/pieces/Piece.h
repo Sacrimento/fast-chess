@@ -1,6 +1,10 @@
 #pragma once
 
 #include <cstdint>
+#include <list>
+#include <ostream>
+
+class ChessEngine;
 
 class Piece
 {
@@ -33,12 +37,12 @@ class Piece
         Piece(Color c, pos2d p) : color(c), pos(p) {}
         virtual ~Piece() {}
 
-        virtual int get_moves() = 0;
-
+        virtual std::list<pos2d> getMoves(ChessEngine *engine) = 0;
         pos2d   getPos() { return pos; }
-        void    setPos(pos2d &p) { pos = p; }
         uint8_t getColor() { return color; }
         uint8_t getPieceRepresentation() { return type | color; }
+
+        virtual void    move(pos2d move) { pos = move; }
 
     protected:
         pos2d   pos;
@@ -47,3 +51,4 @@ class Piece
 };
 
 bool    operator==(const Piece::pos2d &lhs, const Piece::pos2d &rhs);
+std::ostream &operator<<(std::ostream &out, const Piece::pos2d &pos);

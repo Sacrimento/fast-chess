@@ -1,6 +1,13 @@
 #include "Rook.h"
 
-int Rook::get_moves()
+std::list<Piece::pos2d>    Rook::getMoves(ChessEngine *engine)
 {
-    return 1;
+    return std::list<Piece::pos2d>{};
 }
+
+void    Rook::move(pos2d move)
+{
+    pos = move;
+    canCastle = false;
+}
+

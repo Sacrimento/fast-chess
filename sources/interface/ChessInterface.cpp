@@ -1,4 +1,5 @@
 #include "ChessInterface.h"
+#include <iostream>
 
 ChessInterface::ChessInterface(const char *window_name)
 {

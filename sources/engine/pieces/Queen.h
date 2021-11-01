@@ -2,11 +2,11 @@
 
 #include "Piece.h"
 
-class Queen : public Piece 
+class Queen : public Piece
 {
     public:
         Queen(Color c, pos2d pos) : Piece(c, pos) { type = Type::QUEEN; }
         ~Queen() {}
 
-        virtual int get_moves();
+        virtual std::list<pos2d> getMoves(ChessEngine *engine);
 };

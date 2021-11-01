@@ -48,18 +48,26 @@ Piece   *ChessEngine::getPieceFromPos(Piece::pos2d pos)
 void    ChessEngine::move(Piece *piece, Piece::pos2d pos)
 {
     auto target = getPieceFromPos(pos);
+    auto moves = piece->getMoves(this);
+    bool authorized = false;
+
+    for (auto mv : moves) {
+        if (mv == pos) {
+            authorized = true;
+            break;
+        }
+    }
+
+    if (!authorized) return;
 
     // Check if move is legal, can capture, etc
 
-    if (target)
-    {
-        if (piece == target || piece->getColor() == target->getColor())
-            return;
+    if (target) {
         pieces.remove(target);
         delete target;
     }
 
-    piece->setPos(pos);
+    piece->move(pos);
 
 }
 
@@ -72,4 +80,10 @@ void ChessEngine::load_FEN(std::string fen)
 bool    operator==(const Piece::pos2d &lhs, const Piece::pos2d &rhs)
 {
     return lhs.x == rhs.x && lhs.y == rhs.y;
+}
+
+std::ostream &operator<<(std::ostream &out, const Piece::pos2d &pos)
+{
+    out << "pos2d(x = " << (unsigned int)pos.x << ", y = " << (unsigned int)pos.y << ")";
+    return out;
 }

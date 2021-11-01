@@ -1,6 +1,6 @@
 #include "Knight.h"
 
-int Knight::get_moves()
+std::list<Piece::pos2d>    Knight::getMoves(ChessEngine *engine)
 {
-    return 1;
+    return std::list<Piece::pos2d>{};
 }
