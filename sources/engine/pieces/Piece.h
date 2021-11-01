@@ -51,9 +51,9 @@ class Piece
         Type    type;
         Color   color;
 
-        bool    isMoveOnBoard(int8_t x, int8_t y);
-        virtual bool canCapture(Piece *p);
-        bool    isMoveLegal(ChessEngine *engine, int8_t x, int8_t y);
+        bool            isMoveOnBoard(int8_t x, int8_t y);
+        virtual bool    canCapture(Piece *p);
+        bool            isMoveLegal(ChessEngine *engine, int8_t x, int8_t y);
 };
 
 bool    operator==(const Piece::pos2d &lhs, const Piece::pos2d &rhs);
