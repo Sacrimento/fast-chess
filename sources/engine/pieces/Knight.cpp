@@ -16,7 +16,7 @@ std::list<Piece::pos2d>    Knight::getMoves(ChessEngine *engine)
 
     for (auto mv: possibleMoves)
         if (isMoveLegal(engine, mv.x, mv.y))
-            moves.push_back({pos.x + mv.x, pos.y + mv.y});
+            moves.push_back({(int8_t)(pos.x + mv.x), (int8_t)(pos.y + mv.y)});
 
     return moves;
 }
