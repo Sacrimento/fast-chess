@@ -34,10 +34,16 @@ class Piece
         };
 
 
+        struct Move {
+            Piece           *moving;
+            Piece::pos2d    pos;
+            Piece           *eaten = nullptr;
+        };
+
         Piece(Color c, pos2d p) : color(c), pos(p) {}
         virtual ~Piece() {}
 
-        virtual std::list<pos2d> getMoves(ChessEngine *engine) = 0;
+        virtual std::list<Move> getMoves(ChessEngine *engine) = 0;
         pos2d   getPos() { return pos; }
         uint8_t getColor() { return color; }
         uint8_t getType() { return type; }

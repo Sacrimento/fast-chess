@@ -1,8 +1,8 @@
 #include "Knight.h"
 
-std::list<Piece::pos2d>    Knight::getMoves(ChessEngine *engine)
+std::list<Piece::Move>    Knight::getMoves(ChessEngine *engine)
 {
-    std::list<pos2d> moves;
+    std::list<Move> moves;
     std::list<pos2d> possibleMoves = {
         {-1, 2},
         {1, 2},
@@ -16,7 +16,11 @@ std::list<Piece::pos2d>    Knight::getMoves(ChessEngine *engine)
 
     for (auto mv: possibleMoves)
         if (isMoveLegal(engine, mv.x, mv.y))
-            moves.push_back({(int8_t)(pos.x + mv.x), (int8_t)(pos.y + mv.y)});
+            moves.push_back(
+            {
+                this, {(int8_t)(pos.x + mv.x), (int8_t)(pos.y + mv.y)},
+                engine->getPieceFromPos({(int8_t)(pos.x + mv.x), (int8_t)(pos.y + mv.y)})
+            });
 
     return moves;
 }

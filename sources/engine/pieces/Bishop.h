@@ -9,5 +9,5 @@ class Bishop : public Piece
         Bishop(Color c, pos2d pos) : Piece(c, pos) { type = Type::BISHOP; }
         ~Bishop() {}
 
-        virtual std::list<pos2d> getMoves(ChessEngine *engine);
+        virtual std::list<Move> getMoves(ChessEngine *engine);
 };

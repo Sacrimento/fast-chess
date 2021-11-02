@@ -45,23 +45,31 @@ Piece   *ChessEngine::getPieceFromPos(Piece::pos2d pos)
     return nullptr;
 }
 
+Piece::Move   &ChessEngine::getLastMove()
+{
+    return lastMove;
+}
+
+#include <iostream>
+
 void    ChessEngine::move(Piece *piece, Piece::pos2d pos)
 {
-    auto target = getPieceFromPos(pos);
     auto moves = piece->getMoves(this);
+    std::list<Piece::Move>::const_iterator m;
 
-    if (std::find_if(moves.cbegin(), moves.cend(),
-        [pos] (const Piece::pos2d &p) { return p == pos; }) == moves.end())
+    if ((m = std::find_if(moves.cbegin(), moves.cend(),
+        [pos] (const Piece::Move &m) { return m.pos == pos; })) == moves.end())
         return;
 
-    if (target) {
-        pieces.remove(target);
-        delete target;
+    std::cout << "Move : from " << m->moving->getPos() << " to " << m->pos << " (delete " << m->eaten << ")\n";
+
+    if (m->eaten) {
+        pieces.remove(m->eaten);
+        delete m->eaten;
     }
 
     piece->move(pos);
-    lastMove.first = piece;
-    lastMove.second = pos;
+    lastMove = *m;
 }
 
 void ChessEngine::loadFEN(std::string fen)

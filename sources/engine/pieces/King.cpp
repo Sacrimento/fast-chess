@@ -1,8 +1,8 @@
 #include "King.h"
 
-std::list<Piece::pos2d>    King::getMoves(ChessEngine *engine)
+std::list<Piece::Move>    King::getMoves(ChessEngine *engine)
 {
-    return std::list<Piece::pos2d>{};
+    return std::list<Move>{};
 }
 
 void    King::move(pos2d move)
