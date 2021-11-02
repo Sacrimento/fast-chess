@@ -20,6 +20,8 @@ std::list<Piece::Move>    Bishop::getMoves(ChessEngine *engine)
                     // Means we will make a capture, so dont check further than this piece
                     break;
             }
+            else
+                break;
         }
     }
 

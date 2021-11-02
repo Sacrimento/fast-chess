@@ -12,9 +12,11 @@ std::list<Piece::Move>    Rook::getMoves(ChessEngine *engine)
                 target = engine->getPieceFromPos({(int8_t)(pos.x + xmove * inc), pos.y});
                 moves.push_back({this, {(int8_t)(pos.x + xmove * inc), pos.y}, target});
                 if (target)
-                    // Means we will make a capture, so dont check further than this piece
                     break;
+                    // Means we will make a capture, so dont check further than this piece
             }
+            else
+                break;
         }
     }
 
@@ -24,9 +26,11 @@ std::list<Piece::Move>    Rook::getMoves(ChessEngine *engine)
                 target = engine->getPieceFromPos({pos.x, (int8_t)(pos.y + ymove * inc)});
                 moves.push_back({this, {pos.x, (int8_t)(pos.y + ymove * inc)}, target});
                 if (target)
-                    // Means we will make a capture, so dont check further than this piece
                     break;
+                    // Means we will make a capture, so dont check further than this piece
             }
+            else
+                break;
         }
     }
 
