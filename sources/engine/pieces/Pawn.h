@@ -10,11 +10,12 @@ class Pawn : public Piece
         ~Pawn() {}
 
         virtual bool canCapture(Piece *p) override;
-        virtual std::list<pos2d> getMoves(ChessEngine *engine);
+        virtual std::list<Move> getMoves(ChessEngine *engine);
         void    move(pos2d move);
 
     private:
         bool    hasMoved = false;
+        bool    justJumped = false;
 
-        void    checkEnPassant();
+        bool    checkEnPassant(ChessEngine *engine);
 };
