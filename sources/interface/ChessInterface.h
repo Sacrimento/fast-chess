@@ -34,7 +34,8 @@ class ChessInterface : public olc::PixelGameEngine
         bool    handleUserInput();
         olc::vi2d   getCellFromMouse(const olc::vi2d mousePos);
 
-        void drawPieces();
+        void    drawPieces();
+        void    drawAvailableCells();
 
     public:
         ChessInterface(const char *window_name);

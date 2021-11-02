@@ -73,6 +73,9 @@ bool    ChessInterface::OnUserUpdate(float fElapsedTime)
         return false;
 
     drawPieces();
+    
+    drawAvailableCells();
+
 
     SetDrawTarget(nullptr);
 
@@ -108,6 +111,26 @@ bool    ChessInterface::handleUserInput()
     }
 
     return true;
+}
+
+void    ChessInterface::drawAvailableCells()
+{
+    if (!selectedPiece)
+        return;
+
+    SetPixelMode(olc::Pixel::ALPHA);
+    // For some reason the transparency of the pixel works only if a piece is on a cell
+    for (auto m: selectedPiece->getMoves(engine))
+    {
+        FillRect(
+            m.pos.x * CELL_SIZE,
+            m.pos.y * CELL_SIZE,
+            CELL_SIZE,
+            CELL_SIZE,
+            olc::Pixel(219, 136, 11, 200)
+        );
+    }
+    SetPixelMode(olc::Pixel::NORMAL);
 }
 
 olc::vi2d   ChessInterface::getCellFromMouse(const olc::vi2d mousePos)
