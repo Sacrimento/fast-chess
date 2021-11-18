@@ -7,7 +7,7 @@ std::list<Piece::Move>    Pawn::getMoves(ChessEngine *engine)
 
     if (isMoveLegal(engine, 0, direction, false, false))
         moves.push_back({this, {pos.x, (int8_t)(pos.y + direction)}, engine->getPieceFromPos({pos.x, (int8_t)(pos.y + direction)})});
-    if (isMoveLegal(engine, 0, direction * 2, false, false) && !hasMoved)
+    if (!hasMoved && isMoveLegal(engine, 0, direction * 2, false, false) && !engine->isPathObstructed(this, 0, direction, 2))
         moves.push_back({this, {pos.x, (int8_t)(pos.y + direction * 2)}, engine->getPieceFromPos({pos.x, (int8_t)(pos.y + direction * 2)})});
     if (
         checkEnPassant(engine) &&

@@ -50,6 +50,23 @@ Piece::Move   &ChessEngine::getLastMove()
     return lastMove;
 }
 
+bool    ChessEngine::isPathObstructed(Piece *piece, int8_t incx, int8_t incy, uint8_t iterations)
+{
+    uint8_t i = 0;
+    int8_t x = piece->getPos().x;
+    int8_t y = piece->getPos().y;
+
+    while (i < iterations)
+    {
+        x += incx;
+        y += incy;
+        if (getPieceFromPos({x, y}))
+            return true;
+        i++;
+    }
+    return false;
+}
+
 #include <iostream>
 
 void    ChessEngine::move(Piece *piece, Piece::pos2d pos)
