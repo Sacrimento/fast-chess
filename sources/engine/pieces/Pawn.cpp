@@ -11,13 +11,13 @@ std::list<Piece::Move>    Pawn::getMoves(ChessEngine *engine)
         moves.push_back({this, {pos.x, (int8_t)(pos.y + direction * 2)}, engine->getPieceFromPos({pos.x, (int8_t)(pos.y + direction * 2)})});
     if (
         checkEnPassant(engine) &&
-        isMoveLegal(engine, engine->getLastMove().pos.x, pos.y + direction, false, false)
+        isMoveLegal(engine, engine->getLastMove().pos.x - pos.x, direction, false, false)
     )
     {
         moves.push_back(
         {
             this, {engine->getLastMove().pos.x, (int8_t)(pos.y + direction)},
-            engine->getPieceFromPos({engine->getLastMove().pos.x, engine->getLastMove().pos.y})
+            engine->getPieceFromPos(engine->getLastMove().pos)
         });
     }
 
@@ -35,7 +35,7 @@ bool    Pawn::checkEnPassant(ChessEngine *engine)
 {
     auto lastMove = engine->getLastMove();
 
-    if (!lastMove.moving)
+    if (!lastMove.moving || lastMove.moving == this)
         return false;
     if (lastMove.moving->getType() != Type::PAWN ||
         !(static_cast<Pawn *>(lastMove.moving)->justJumped))
