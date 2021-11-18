@@ -61,11 +61,11 @@ void    ChessEngine::move(Piece *piece, Piece::pos2d pos)
         [pos] (const Piece::Move &m) { return m.pos == pos; })) == moves.end())
         return;
 
-    std::cout << "Move : from " << m->moving->getPos() << " to " << m->pos << " (delete " << m->eaten << ")\n";
+    std::cout << "Move : from " << m->moving->getPos() << " to " << m->pos << " (delete " << m->captured << ")\n";
 
-    if (m->eaten) {
-        pieces.remove(m->eaten);
-        delete m->eaten;
+    if (m->captured) {
+        pieces.remove(m->captured);
+        delete m->captured;
     }
 
     piece->move(pos);
@@ -81,10 +81,4 @@ void ChessEngine::loadFEN(std::string fen)
 bool    operator==(const Piece::pos2d &lhs, const Piece::pos2d &rhs)
 {
     return lhs.x == rhs.x && lhs.y == rhs.y;
-}
-
-std::ostream &operator<<(std::ostream &out, const Piece::pos2d &pos)
-{
-    out << "pos2d(x = " << (unsigned int)pos.x << ", y = " << (unsigned int)pos.y << ")";
-    return out;
 }

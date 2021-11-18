@@ -1,26 +1,17 @@
 #include "Pawn.h"
 
-bool Pawn::canCapture(Piece *p) {
-    if (!Piece::canCapture(p))
-        return false;
-
-    return p->getPos().x == pos.x - 1 || p->getPos().x == pos.x + 1;
-}
-
-#include <iostream>
-
 std::list<Piece::Move>    Pawn::getMoves(ChessEngine *engine)
 {
     std::list<Move> moves;
     int8_t direction = color == Color::BLACK ? 1 : -1;
 
-    if (isMoveLegal(engine, 0, direction))
+    if (isMoveLegal(engine, 0, direction, false, false))
         moves.push_back({this, {pos.x, (int8_t)(pos.y + direction)}, engine->getPieceFromPos({pos.x, (int8_t)(pos.y + direction)})});
-    if (isMoveLegal(engine, 0, direction * 2) && !hasMoved)
+    if (isMoveLegal(engine, 0, direction * 2, false, false) && !hasMoved)
         moves.push_back({this, {pos.x, (int8_t)(pos.y + direction * 2)}, engine->getPieceFromPos({pos.x, (int8_t)(pos.y + direction * 2)})});
     if (
         checkEnPassant(engine) &&
-        isMoveLegal(engine, engine->getLastMove().pos.x, pos.y + direction)
+        isMoveLegal(engine, engine->getLastMove().pos.x, pos.y + direction, false, false)
     )
     {
         moves.push_back(
@@ -30,10 +21,12 @@ std::list<Piece::Move>    Pawn::getMoves(ChessEngine *engine)
         });
     }
 
-    if (isMoveLegal(engine, -1, direction))
+    if (isMoveLegal(engine, -1, direction, true))
         moves.push_back({this, {(int8_t)(pos.x - 1), (int8_t)(pos.y + direction)}, engine->getPieceFromPos({(int8_t)(pos.x - 1), (int8_t)(pos.y + direction)})});
-    if (isMoveLegal(engine, 1, direction))
+    if (isMoveLegal(engine, 1, direction, true))
         moves.push_back({this, {(int8_t)(pos.x + 1), (int8_t)(pos.y + direction)}, engine->getPieceFromPos({(int8_t)(pos.x + 1), (int8_t)(pos.y + direction)})});
+
+    //TODO: Check for promotion aswell ?
 
     return moves;
 }
