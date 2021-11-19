@@ -2,8 +2,10 @@
 
 #include <string>
 #include <cctype>
+#include <sstream>
 #include <map>
 #include <list>
+#include <exception>
 
 #include "Piece.h"
 #include "ChessEngine.h"
@@ -20,6 +22,19 @@ namespace FEN
     };
     static const std::string fenPieces = "rnbqkpRNBQKP";
 
-    std::list<Piece *>  load(std::string fen);
-    bool                isChessPiece(char &c);
+    struct Position {
+        std::list<Piece *>  pieces;
+        char                turn = 'w';
+
+    };
+
+    class ParserException : public std::runtime_error {
+        public:
+            ParserException() : std::runtime_error("invalid argument") {}
+            ParserException(const std::string& what) : std::runtime_error(what) {}
+            ~ParserException() throw() {}
+    };
+
+    std::list<Piece *>  loadPieces(std::string &sPieces);
+    Position            load(std::string fen);
 };

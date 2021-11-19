@@ -112,7 +112,16 @@ void    ChessEngine::move(Piece *piece, Piece::pos2d pos)
 void ChessEngine::loadFEN(std::string fen)
 {
     cleanup();
-    pieces = FEN::load(fen);
+    FEN::Position   position;
+
+    try {
+        position = FEN::load(fen);
+    } catch (FEN::ParserException &e) {
+        std::cerr << "Could not parse FEN : " << e.what() << std::endl;
+    };
+
+    pieces = position.pieces;
+    turn = (position.turn == 'w' ? Piece::Color::WHITE : Piece::Color::BLACK);
 }
 
 void ChessEngine::setPromotionType(Piece::Type t)
