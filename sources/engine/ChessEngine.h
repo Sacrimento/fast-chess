@@ -16,9 +16,16 @@
 #include "fen.h"
 
 struct Move {
+    enum Flag {
+        Unset,
+        Castle,
+        Promotion,
+    };
+
     Piece           *moving;
     Piece::pos2d    pos;
     Piece           *captured = nullptr;
+    Flag            flag = Unset;
 };
 
 class ChessEngine
@@ -42,6 +49,8 @@ class ChessEngine
     private:
         const char *initial_pos = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
         Move    lastMove = {nullptr, {-1, -1}, nullptr};
+
+        void handleRookAfterCastle(const Move &m);
 
         void cleanup();
 

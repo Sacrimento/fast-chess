@@ -33,7 +33,8 @@ std::list<Move>    King::getMoves(ChessEngine *engine)
                         (int8_t)(pos.x + (rookOffset > 0 ? 2 : -2)),
                         pos.y
                     },
-                    nullptr
+                    nullptr,
+                    Move::Flag::Castle
                 });
     }
 

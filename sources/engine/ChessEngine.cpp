@@ -80,6 +80,9 @@ void    ChessEngine::move(Piece *piece, Piece::pos2d pos)
 
     std::cout << "Move : from " << m->moving->getPos() << " to " << m->pos << " (delete " << m->captured << ")\n";
 
+    if (m->flag == Move::Flag::Castle)
+        handleRookAfterCastle(*m);
+
     if (m->captured) {
         pieces.remove(m->captured);
         delete m->captured;
@@ -93,4 +96,13 @@ void ChessEngine::loadFEN(std::string fen)
 {
     cleanup();
     pieces = FEN::load(fen);
+}
+
+void ChessEngine::handleRookAfterCastle(const Move &m)
+{
+    auto kingx = m.pos.x - m.moving->getPos().x;
+    auto targetx = m.pos.x + (kingx > 0 ? -1 : 1);
+    auto rook = getPieceFromPos({(int8_t)(kingx > 0 ? 7 : 0), m.pos.y});
+
+    rook->move({(int8_t)targetx, m.pos.y});
 }
