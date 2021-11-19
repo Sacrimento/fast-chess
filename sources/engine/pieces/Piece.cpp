@@ -29,6 +29,11 @@ bool    Piece::isMoveLegal(ChessEngine *engine, int8_t x, int8_t y, bool mustCap
 
 std::ostream &operator<<(std::ostream &out, const Piece::pos2d &pos)
 {
-    out << "pos2d(x = " << (unsigned int)pos.x << ", y = " << (unsigned int)pos.y << ")";
+    out << "pos2d(x = " << (int)pos.x << ", y = " << (int)pos.y << ")";
     return out;
+}
+
+bool    operator==(const Piece::pos2d &lhs, const Piece::pos2d &rhs)
+{
+    return lhs.x == rhs.x && lhs.y == rhs.y;
 }

@@ -1,6 +1,6 @@
 #include "Pawn.h"
 
-std::list<Piece::Move>    Pawn::getMoves(ChessEngine *engine)
+std::list<Move>    Pawn::getMoves(ChessEngine *engine)
 {
     std::list<Move> moves;
     int8_t direction = color == Color::BLACK ? 1 : -1;

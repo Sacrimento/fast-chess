@@ -5,6 +5,7 @@
 #include <ostream>
 
 class ChessEngine;
+struct Move;
 
 class Piece
 {
@@ -12,13 +13,12 @@ class Piece
 
         enum Type
         {
-            UNSET = 0,
-            PAWN = 1,
-            BISHOP = 2,
-            KNIGHT = 3,
-            ROOK = 4,
-            QUEEN = 5,
-            KING = 6,
+            PAWN,
+            BISHOP,
+            KNIGHT,
+            ROOK,
+            QUEEN,
+            KING,
         };
 
         enum Color
@@ -31,13 +31,6 @@ class Piece
         {
             int8_t x;
             int8_t y;
-        };
-
-
-        struct Move {
-            Piece           *moving;
-            Piece::pos2d    pos;
-            Piece           *captured = nullptr;
         };
 
         Piece(Color c, pos2d p) : color(c), pos(p) {}

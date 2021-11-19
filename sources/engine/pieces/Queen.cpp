@@ -1,6 +1,6 @@
 #include "Queen.h"
 
-std::list<Piece::Move> Queen::getMoves(ChessEngine *engine)
+std::list<Move> Queen::getMoves(ChessEngine *engine)
 {
     std::list<Move> moves;
     Piece *target = nullptr;

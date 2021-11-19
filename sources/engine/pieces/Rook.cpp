@@ -1,8 +1,7 @@
 #include "Rook.h"
 
-std::list<Piece::Move>    Rook::getMoves(ChessEngine *engine)
+std::list<Move>    Rook::getMoves(ChessEngine *engine)
 {
-
     std::list<Move> moves;
     Piece *target = nullptr;
 

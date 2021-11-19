@@ -45,7 +45,7 @@ Piece   *ChessEngine::getPieceFromPos(Piece::pos2d pos)
     return nullptr;
 }
 
-Piece::Move   &ChessEngine::getLastMove()
+Move   &ChessEngine::getLastMove()
 {
     return lastMove;
 }
@@ -72,10 +72,10 @@ bool    ChessEngine::isPathObstructed(Piece *piece, int8_t incx, int8_t incy, ui
 void    ChessEngine::move(Piece *piece, Piece::pos2d pos)
 {
     auto moves = piece->getMoves(this);
-    std::list<Piece::Move>::const_iterator m;
+    std::list<Move>::const_iterator m;
 
     if ((m = std::find_if(moves.cbegin(), moves.cend(),
-        [pos] (const Piece::Move &m) { return m.pos == pos; })) == moves.end())
+        [pos] (const Move &m) { return m.pos == pos; })) == moves.end())
         return;
 
     std::cout << "Move : from " << m->moving->getPos() << " to " << m->pos << " (delete " << m->captured << ")\n";
@@ -93,9 +93,4 @@ void ChessEngine::loadFEN(std::string fen)
 {
     cleanup();
     pieces = FEN::load(fen);
-}
-
-bool    operator==(const Piece::pos2d &lhs, const Piece::pos2d &rhs)
-{
-    return lhs.x == rhs.x && lhs.y == rhs.y;
 }

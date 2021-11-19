@@ -1,6 +1,6 @@
 #include "Knight.h"
 
-std::list<Piece::Move>    Knight::getMoves(ChessEngine *engine)
+std::list<Move>    Knight::getMoves(ChessEngine *engine)
 {
     std::list<Move> moves;
     std::list<pos2d> possibleMoves = {

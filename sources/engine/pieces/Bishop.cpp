@@ -1,6 +1,6 @@
 #include "Bishop.h"
 
-std::list<Piece::Move>    Bishop::getMoves(ChessEngine *engine)
+std::list<Move>    Bishop::getMoves(ChessEngine *engine)
 {
     std::list<Move> moves;
     std::list<pos2d> possibleMoves = {
