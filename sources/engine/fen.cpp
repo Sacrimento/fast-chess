@@ -14,7 +14,36 @@ FEN::Position   FEN::load(std::string fen)
         throw FEN::ParserException("invalid turn character");
     position.turn = part[0];
 
+    std::getline(fenstream, part, ' ');
+    FEN::loadPossibleCastles(&position, part);
+
     return position;
+}
+
+Piece   *FEN::retrievePiece(std::list<Piece *> &pieces, Piece::Type t, Piece::Color c, uint8_t x)
+{
+    for (auto &p : pieces)
+        if (p->getColor() == c && p->getType() == t && (t == Piece::Type::KING || p->getPos().x == x))
+            return p;
+    throw FEN::ParserException("illegal castle instruction");
+}
+
+void    FEN::loadPossibleCastles(FEN::Position *position, std::string &possibleCastles)
+{
+    std::list<Piece *>::iterator p;
+    Piece::Color    color;
+
+    if (possibleCastles == "-")
+        return;
+
+    for (auto &c : possibleCastles)
+    {
+        if (std::tolower(c) != 'k' && std::tolower(c) != 'q')
+            throw FEN::ParserException("invalid castle character");
+        color = (std::islower(c) ? Piece::Color::BLACK : Piece::Color::WHITE);
+        static_cast<King *>(FEN::retrievePiece(position->pieces, Piece::Type::KING, color))->canCastle = true;
+        static_cast<Rook *>(FEN::retrievePiece(position->pieces, Piece::Type::ROOK, color, (std::tolower(c) == 'k' ? 7 : 0)))->canCastle = true;
+    }
 }
 
 std::list<Piece *>  FEN::loadPieces(std::string &sPieces)

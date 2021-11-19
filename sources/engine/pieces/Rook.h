@@ -12,5 +12,5 @@ class Rook : public Piece
         virtual std::list<Move>    getMoves(ChessEngine *engine);
         void    move(pos2d move) override;
 
-        bool canCastle = true;
+        bool canCastle = false;
 };

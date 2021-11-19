@@ -4,6 +4,7 @@
 #include <list>
 #include <algorithm>
 #include <utility>
+#include <iostream>
 
 #include "Piece.h"
 #include "Pawn.h"
@@ -50,9 +51,9 @@ class ChessEngine
         static Piece    *createPiece(Piece::Type type, Piece::Color color, Piece::pos2d pos);
 
     private:
-        const char  *initial_pos = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
-        Move        lastMove = {nullptr, {-1, -1}, nullptr};
-        Piece::Type promotionType = Piece::Type::QUEEN;
+        const char      *initial_pos = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+        Move            lastMove = {nullptr, {-1, -1}, nullptr};
+        Piece::Type     promotionType = Piece::Type::QUEEN;
         Piece::Color    turn;
 
         void handleRookAfterCastle(const Move &m);

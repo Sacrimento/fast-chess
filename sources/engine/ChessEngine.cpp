@@ -72,8 +72,6 @@ bool    ChessEngine::isPathObstructed(Piece *piece, int8_t incx, int8_t incy, ui
     return false;
 }
 
-#include <iostream>
-
 void    ChessEngine::move(Piece *piece, Piece::pos2d pos)
 {
     if (piece->getColor() != turn)

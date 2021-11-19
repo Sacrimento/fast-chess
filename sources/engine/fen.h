@@ -35,6 +35,9 @@ namespace FEN
             ~ParserException() throw() {}
     };
 
-    std::list<Piece *>  loadPieces(std::string &sPieces);
     Position            load(std::string fen);
+    std::list<Piece *>  loadPieces(std::string &sPieces);
+    void                loadPossibleCastles(Position *position, std::string &possibleCastles);
+
+    Piece   *retrievePiece(std::list<Piece *> &pieces, Piece::Type t, Piece::Color c, uint8_t x = 0);
 };
