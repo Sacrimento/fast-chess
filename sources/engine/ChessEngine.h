@@ -41,6 +41,7 @@ class ChessEngine
 
         Piece   *getPieceFromPos(Piece::pos2d pos);
         Move    &getLastMove();
+        Piece::Color    getTurn();
 
         void    move(Piece *piece, Piece::pos2d pos);
         bool    isPathObstructed(Piece *piece, int8_t incx, int8_t incy, uint8_t iterations);
@@ -52,6 +53,7 @@ class ChessEngine
         const char  *initial_pos = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
         Move        lastMove = {nullptr, {-1, -1}, nullptr};
         Piece::Type promotionType = Piece::Type::QUEEN;
+        Piece::Color    turn = Piece::Color::WHITE;
 
         void handleRookAfterCastle(const Move &m);
 

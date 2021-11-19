@@ -50,6 +50,11 @@ Move   &ChessEngine::getLastMove()
     return lastMove;
 }
 
+Piece::Color    ChessEngine::getTurn()
+{
+    return turn;
+}
+
 bool    ChessEngine::isPathObstructed(Piece *piece, int8_t incx, int8_t incy, uint8_t iterations)
 {
     uint8_t i = 0;
@@ -71,6 +76,9 @@ bool    ChessEngine::isPathObstructed(Piece *piece, int8_t incx, int8_t incy, ui
 
 void    ChessEngine::move(Piece *piece, Piece::pos2d pos)
 {
+    if (piece->getColor() != turn)
+        return;
+
     auto moves = piece->getMoves(this);
     std::list<Move>::const_iterator m;
 
@@ -97,6 +105,7 @@ void    ChessEngine::move(Piece *piece, Piece::pos2d pos)
         delete m->moving;
     }
 
+    turn = (Piece::Color)(Piece::Color::WHITE - turn); // Flips turn between BLACK and WHITE thanks to their numeric values
     lastMove = *m;
 }
 

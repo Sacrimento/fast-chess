@@ -115,7 +115,7 @@ bool    ChessInterface::handleUserInput()
 
 void    ChessInterface::drawAvailableCells()
 {
-    if (!selectedPiece)
+    if (!selectedPiece || selectedPiece->getColor() != engine->getTurn())
         return;
 
     SetPixelMode(olc::Pixel::ALPHA);
