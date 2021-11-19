@@ -38,8 +38,8 @@ class Piece
 
         virtual std::list<Move> getMoves(ChessEngine *engine) = 0;
         pos2d   getPos() { return pos; }
-        uint8_t getColor() { return color; }
-        uint8_t getType() { return type; }
+        Color   getColor() { return color; }
+        Type    getType() { return type; }
         uint8_t getPieceRepresentation() { return type | color; }
 
 

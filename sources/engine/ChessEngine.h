@@ -37,6 +37,8 @@ class ChessEngine
 
         std::list<Piece *> pieces;
 
+        void    setPromotionType(Piece::Type t);
+
         Piece   *getPieceFromPos(Piece::pos2d pos);
         Move    &getLastMove();
 
@@ -44,11 +46,12 @@ class ChessEngine
         bool    isPathObstructed(Piece *piece, int8_t incx, int8_t incy, uint8_t iterations);
 
         void    loadFEN(std::string fen);
-        static Piece    *create_piece(Piece::Type type, Piece::Color color, Piece::pos2d pos);
+        static Piece    *createPiece(Piece::Type type, Piece::Color color, Piece::pos2d pos);
 
     private:
-        const char *initial_pos = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
-        Move    lastMove = {nullptr, {-1, -1}, nullptr};
+        const char  *initial_pos = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+        Move        lastMove = {nullptr, {-1, -1}, nullptr};
+        Piece::Type promotionType = Piece::Type::QUEEN;
 
         void handleRookAfterCastle(const Move &m);
 

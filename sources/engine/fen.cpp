@@ -46,7 +46,7 @@ std::list<Piece *>  FEN::load(std::string fen)
         }
         else if (FEN::isChessPiece(c) && !nbSpaces) {
             pieces.push_back(
-                ChessEngine::create_piece(
+                ChessEngine::createPiece(
                     pieceMap.at(std::tolower(c)),
                     (std::isupper(c) ? Piece::Color::WHITE : Piece::Color::BLACK),
                     {column, row}

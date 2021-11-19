@@ -23,7 +23,7 @@ void ChessEngine::cleanup()
         delete p;
 }
 
-Piece *ChessEngine::create_piece(Piece::Type type, Piece::Color color, Piece::pos2d pos)
+Piece *ChessEngine::createPiece(Piece::Type type, Piece::Color color, Piece::pos2d pos)
 {
     switch (type)
     {
@@ -88,7 +88,15 @@ void    ChessEngine::move(Piece *piece, Piece::pos2d pos)
         delete m->captured;
     }
 
-    piece->move(pos);
+    if (m->flag != Move::Flag::Promotion)
+        piece->move(pos);
+    else
+    {
+        pieces.remove(m->moving);
+        pieces.push_back(createPiece(promotionType, m->moving->getColor(), m->pos));
+        delete m->moving;
+    }
+
     lastMove = *m;
 }
 
@@ -96,6 +104,11 @@ void ChessEngine::loadFEN(std::string fen)
 {
     cleanup();
     pieces = FEN::load(fen);
+}
+
+void ChessEngine::setPromotionType(Piece::Type t)
+{
+    promotionType = t;
 }
 
 void ChessEngine::handleRookAfterCastle(const Move &m)
