@@ -1,6 +1,7 @@
 #pragma once
 
 #include "olcPixelGameEngine.h"
+#include "olcPGEX_Sound.h"
 
 #include "ChessEngine.h"
 
@@ -18,6 +19,8 @@ class ChessInterface : public olc::PixelGameEngine
         int     pieceLayer;
         float   pieceSize;
         float   pieceScaling;
+        int     sMove;
+        int     sDraw;
 
         Piece   *selectedPiece = nullptr;
 

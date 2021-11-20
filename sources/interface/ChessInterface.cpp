@@ -1,6 +1,7 @@
 #include "ChessInterface.h"
 #include <iostream>
 
+
 ChessInterface::ChessInterface(const char *windowName)
 {
     sAppName = windowName;
@@ -30,6 +31,8 @@ bool    ChessInterface::OnUserCreate()
     pieceLayer = CreateLayer();
     SetDrawTarget(pieceLayer);
     EnableLayer(pieceLayer, true);
+
+    olc::SOUND::InitialiseAudio();
 
     if (!loadAssets())
         return false;
@@ -72,9 +75,8 @@ bool    ChessInterface::OnUserUpdate(float fElapsedTime)
         return false;
 
     drawPieces();
-    
-    drawAvailableCells();
 
+    drawAvailableCells();
 
     SetDrawTarget(nullptr);
 
@@ -88,6 +90,9 @@ bool    ChessInterface::OnUserDestroy()
         delete d.second->sprite;
         delete d.second;
     }
+
+    olc::SOUND::DestroyAudio();
+
     return true;
 }
 
@@ -104,8 +109,10 @@ bool    ChessInterface::handleUserInput()
             selectedPiece = nullptr;
             return true;
         }
-        if (selectedPiece)
+        if (selectedPiece) {
             engine->move(selectedPiece, {(int8_t)cell.x, (int8_t)cell.y});
+            olc::SOUND::PlaySample(sMove);
+        }
         selectedPiece = nullptr;
     }
 
@@ -114,7 +121,7 @@ bool    ChessInterface::handleUserInput()
 
 void    ChessInterface::drawAvailableCells()
 {
-    if (!selectedPiece || selectedPiece->getColor() != engine->getTurn())
+    if (!selectedPiece || selectedPiece->getColor() != engine->getTurn() || engine->getState() != ChessEngine::State::INGAME)
         return;
 
     SetPixelMode(olc::Pixel::ALPHA);
@@ -153,6 +160,9 @@ bool    ChessInterface::loadAssets()
     ALLOC_SPRITE("./assets/chess.com/bqueen.png", Piece::Type::QUEEN | Piece::Color::BLACK)
     ALLOC_SPRITE("./assets/chess.com/wking.png", Piece::Type::KING | Piece::Color::WHITE)
     ALLOC_SPRITE("./assets/chess.com/bking.png", Piece::Type::KING | Piece::Color::BLACK)
+
+    sMove = olc::SOUND::LoadAudioSample("./assets/sounds/move.wav");
+    sDraw = olc::SOUND::LoadAudioSample("./assets/sounds/draw.wav");
 
     pieceSize = pieceDecals[Piece::Type::QUEEN | Piece::Color::WHITE]->sprite->height;
     pieceScaling = ScreenHeight() / 8 / pieceSize;

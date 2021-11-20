@@ -25,6 +25,7 @@ namespace FEN
     struct Position {
         std::list<Piece *>  pieces;
         char                turn = 'w';
+        uint8_t             fmCounter;    
 
     };
 

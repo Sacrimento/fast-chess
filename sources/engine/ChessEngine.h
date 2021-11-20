@@ -32,6 +32,15 @@ struct Move {
 class ChessEngine
 {
     public:
+
+        enum State {
+            INGAME,
+            PAUSED,
+            DRAW,
+            W_WIN,
+            B_WIN,
+        };
+
         ChessEngine();
         ChessEngine(const char *fen);
         ~ChessEngine();
@@ -42,6 +51,7 @@ class ChessEngine
 
         Piece   *getPieceFromPos(Piece::pos2d pos);
         Move    &getLastMove();
+        State   getState() { return state; }
         Piece::Color    getTurn();
 
         void    move(Piece *piece, Piece::pos2d pos);
@@ -55,10 +65,12 @@ class ChessEngine
         Move            lastMove = {nullptr, {-1, -1}, nullptr};
         Piece::Type     promotionType = Piece::Type::QUEEN;
         Piece::Color    turn;
+        State           state = INGAME;
+
+        uint8_t fmCounter; //"fifty-move"
 
         void handleRookAfterCastle(const Move &m);
 
         void cleanup();
-
 
 };

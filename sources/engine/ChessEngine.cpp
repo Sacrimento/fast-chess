@@ -74,7 +74,7 @@ bool    ChessEngine::isPathObstructed(Piece *piece, int8_t incx, int8_t incy, ui
 
 void    ChessEngine::move(Piece *piece, Piece::pos2d pos)
 {
-    if (piece->getColor() != turn)
+    if (piece->getColor() != turn || state != State::INGAME)
         return;
 
     auto moves = piece->getMoves(this);
@@ -92,19 +92,24 @@ void    ChessEngine::move(Piece *piece, Piece::pos2d pos)
     if (m->captured) {
         pieces.remove(m->captured);
         delete m->captured;
+        fmCounter = 0;
     }
 
-    if (m->flag != Move::Flag::Promotion)
+    if (m->flag != Move::Flag::Promotion) {
         piece->move(pos);
+        fmCounter = piece->getType() != Piece::Type::PAWN ? fmCounter + 1 : 0;
+    }
     else
     {
         pieces.remove(m->moving);
         pieces.push_back(createPiece(promotionType, m->moving->getColor(), m->pos));
         delete m->moving;
+        fmCounter = 0;
     }
 
     turn = (Piece::Color)(Piece::Color::WHITE - turn); // Flips turn between BLACK and WHITE thanks to their numeric values
     lastMove = *m;
+    if (fmCounter == 50) state = DRAW;
 }
 
 void ChessEngine::loadFEN(std::string fen)
@@ -120,6 +125,7 @@ void ChessEngine::loadFEN(std::string fen)
 
     pieces = position.pieces;
     turn = (position.turn == 'w' ? Piece::Color::WHITE : Piece::Color::BLACK);
+    fmCounter = position.fmCounter;
 }
 
 void ChessEngine::setPromotionType(Piece::Type t)

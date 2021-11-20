@@ -1,5 +1,5 @@
 NAME = fast-chess
-FLAGS = -std=c++17 -Wextra -lX11 -lGL -lpthread -lpng -lstdc++fs
+FLAGS = -std=c++17 -Wextra -lX11 -lGL -lpthread -lpng -lstdc++fs -lopenal
 COMPILER = g++
 
 SRC_SUBDIRS = engine engine/pieces interface

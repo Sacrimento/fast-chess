@@ -17,6 +17,12 @@ FEN::Position   FEN::load(std::string fen)
     std::getline(fenstream, part, ' ');
     FEN::loadPossibleCastles(&position, part);
 
+    std::getline(fenstream, part, ' ');
+    // On skip le "-"
+    
+    std::getline(fenstream, part, ' ');
+    position.fmCounter = std::stoi(part);
+
     return position;
 }
 
