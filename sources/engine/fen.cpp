@@ -30,7 +30,6 @@ Piece   *FEN::retrievePiece(std::list<Piece *> &pieces, Piece::Type t, Piece::Co
 
 void    FEN::loadPossibleCastles(FEN::Position *position, std::string &possibleCastles)
 {
-    std::list<Piece *>::iterator p;
     Piece::Color    color;
 
     if (possibleCastles == "-")

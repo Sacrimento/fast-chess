@@ -39,22 +39,12 @@ bool    ChessInterface::OnUserCreate()
 
 
 void    ChessInterface::drawPieces() {
+    Piece::pos2d pos;
     for (auto p : engine->pieces)
     {
-        if (p == selectedPiece)
+        if (p != selectedPiece)
         {
-            DrawDecal(
-                {
-                    MAX_BOARD(GetMouseX()) - pieceSize * pieceScaling / 2,
-                    MAX_BOARD(GetMouseY()) - pieceSize * pieceScaling / 2
-                },
-                pieceDecals[p->getPieceRepresentation()],
-                {pieceScaling, pieceScaling}
-            );
-        }
-        else
-        {
-            auto pos = p->getPos();
+            pos = p->getPos();
             DrawDecal(
                 {float(pos.x) * float(CELL_SIZE), float(pos.y) * float(CELL_SIZE)},
                 pieceDecals[p->getPieceRepresentation()],
@@ -62,8 +52,17 @@ void    ChessInterface::drawPieces() {
             );
         }
     }
+    // Draw selected piece on top of the others
+    if (selectedPiece)
+        DrawDecal(
+            {
+                MAX_BOARD(GetMouseX()) - pieceSize * pieceScaling / 2,
+                MAX_BOARD(GetMouseY()) - pieceSize * pieceScaling / 2
+            },
+            pieceDecals[selectedPiece->getPieceRepresentation()],
+            {pieceScaling, pieceScaling}
+        );
 }
-
 
 bool    ChessInterface::OnUserUpdate(float fElapsedTime)
 {
@@ -127,7 +126,7 @@ void    ChessInterface::drawAvailableCells()
             m.pos.y * CELL_SIZE,
             CELL_SIZE,
             CELL_SIZE,
-            olc::Pixel(219, 136, 11, 200)
+            olc::Pixel(219, 136, 11, 120)
         );
     }
     SetPixelMode(olc::Pixel::NORMAL);
