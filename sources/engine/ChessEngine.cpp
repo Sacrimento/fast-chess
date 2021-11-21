@@ -57,7 +57,7 @@ Piece::Color    ChessEngine::getTurn()
     return turn;
 }
 
-std::list<Piece::pos2d> &ChessEngine::getAttackedSquares()
+std::map<Piece *, std::list<Piece::pos2d>> &ChessEngine::getAttackedSquares()
 {
     return attackedSquares;
 }
@@ -89,9 +89,8 @@ void    ChessEngine::move(Piece *piece, Piece::pos2d pos)
 
     if ((m = std::find_if(moves.cbegin(), moves.cend(),
         [pos] (const Move &m) { return m.pos == pos; })) == moves.end())
+        //Move illegal
         return;
-
-    std::cout << "Move : from " << m->moving->getPos() << " to " << m->pos << " (delete " << m->captured << ")\n";
 
     if (m->flag == Move::Flag::Castle)
         handleRookAfterCastle(*m);
@@ -114,11 +113,30 @@ void    ChessEngine::move(Piece *piece, Piece::pos2d pos)
         fmCounter = 0;
     }
 
+    // Compute attacked squares by the player that just moved
     computeAttackedSquares();
-
     turn = (Piece::Color)(Piece::Color::WHITE - turn); // Flips turn between BLACK and WHITE thanks to their numeric values
+    // Check if the enemy King is in check
+    updateEnemyKingStatus();
+
+    if (!checkingPieces.empty())
+    {
+        for (auto &p : checkingPieces)
+            std::cout << (turn == Piece::Color::WHITE ? "White" : "Black") << " king is checked by " << p->getPos() << std::endl;
+    }
+
     lastMove = *m;
     if (fmCounter == 50) state = DRAW;
+}
+
+void ChessEngine::updateEnemyKingStatus()
+{
+    checkingPieces.clear();
+    Piece *king = *std::find_if(pieces.begin(), pieces.end(), [this] (Piece *p) { return p->getPieceRepresentation() == (Piece::Type::KING | turn);});
+
+    for (auto &p : attackedSquares)
+        if (std::find_if(p.second.cbegin(), p.second.cend(), [king] (const Piece::pos2d &pos) { return king->getPos() == pos; }) != p.second.cend())
+            checkingPieces.push_back(p.first);
 }
 
 void ChessEngine::loadFEN(std::string fen)
@@ -145,11 +163,21 @@ void ChessEngine::computeAttackedSquares()
 
     for (auto &p : pieces)
     {
+        std::list<Piece::pos2d> attacked;
         if (p->getColor() != turn)
             continue;
         for (auto &m : p->getMoves(this, true))
-            attackedSquares.push_back(m.pos);
+            attacked.push_back(m.pos);
+        attackedSquares.insert({p, attacked});
     }
+}
+
+bool ChessEngine::isSquareAttacked(Piece::pos2d &pos)
+{
+    for (auto &a : attackedSquares)
+        if (std::find_if(a.second.cbegin(), a.second.cend(), [pos] (const Piece::pos2d &p) { return p == pos; }) != a.second.cend())
+            return true;
+    return false;
 }
 
 void ChessEngine::setPromotionType(Piece::Type t)

@@ -9,9 +9,7 @@ bool    Piece::isMoveOnBoard(int8_t x, int8_t y) {
 }
 
 bool    Piece::canCapture(Piece *p, bool allowOwnPieceAttack) {
-    if (allowOwnPieceAttack)
-        return p->getType() != Piece::Type::KING;
-    return p->getColor() != color && p->getType() != Piece::Type::KING;
+    return (allowOwnPieceAttack || p->getColor() != color);
 }
 
 bool    Piece::isMoveLegal(ChessEngine *engine, int8_t x, int8_t y, bool allowOwnPieceAttack, bool mustCapture, bool canMoveCapture) {

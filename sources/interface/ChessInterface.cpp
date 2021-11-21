@@ -145,15 +145,14 @@ void    ChessInterface::drawAttackedCells()
 {
     SetPixelMode(olc::Pixel::ALPHA);
     for (auto &p: engine->getAttackedSquares())
-    {
-        FillRect(
-            p.x * CELL_SIZE,
-            p.y * CELL_SIZE,
-            CELL_SIZE,
-            CELL_SIZE,
-            olc::Pixel(255, 30, 30, 150)
-        );
-    }
+        for (auto &pos : p.second)
+            FillRect(
+                pos.x * CELL_SIZE,
+                pos.y * CELL_SIZE,
+                CELL_SIZE,
+                CELL_SIZE,
+                olc::Pixel(255, 30, 30, 150)
+            );
     SetPixelMode(olc::Pixel::NORMAL);
 }
 

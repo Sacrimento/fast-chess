@@ -10,11 +10,10 @@ std::list<Move>    King::getMoves(ChessEngine *engine, bool allAttackedSquares)
     for (int8_t xmove : {-1, 1, 0}) {
         for (int8_t ymove : {-1, 1, 0}) {
             targetSquare = { (int8_t)(pos.x + xmove), (int8_t)(pos.y + ymove) };
-            if (isMoveLegal(engine, xmove, ymove, allAttackedSquares) &&
-                std::find_if(attacked.cbegin(), attacked.cend(), [targetSquare] (const pos2d &pos) { return targetSquare == pos; }) == attacked.cend())
+            if (isMoveLegal(engine, xmove, ymove, allAttackedSquares) && !engine->isSquareAttacked(targetSquare))
             {
-                target = engine->getPieceFromPos({(int8_t)(pos.x + xmove), (int8_t)(pos.y + ymove)});
-                moves.push_back({this, targetSquare, target});
+                        target = engine->getPieceFromPos({(int8_t)(pos.x + xmove), (int8_t)(pos.y + ymove)});
+                        moves.push_back({this, targetSquare, target});
             }
         }
     }
@@ -52,8 +51,7 @@ bool    King::checkCastle(ChessEngine *engine, int8_t xoffset)
     for (int8_t i = (xoffset > 0 ? 1 : -1); i < std::abs(xoffset); (xoffset > 0 ? ++i : --i))
     {
         p = {(int8_t)(pos.x + i), pos.y};
-        if (std::find_if(attacked.cbegin(), attacked.cend(), [p] (const pos2d &pos) { return p == pos; }) != attacked.cend())
-            // Castle is illegal, king would be in check
+        if (engine->isSquareAttacked(p))
             return false;
     }
     return true;
