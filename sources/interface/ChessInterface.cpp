@@ -76,6 +76,9 @@ bool    ChessInterface::OnUserUpdate(float fElapsedTime)
 
     drawPieces();
 
+#if DEBUG
+    drawAttackedCells();
+#endif
     drawAvailableCells();
 
     SetDrawTarget(nullptr);
@@ -125,7 +128,6 @@ void    ChessInterface::drawAvailableCells()
         return;
 
     SetPixelMode(olc::Pixel::ALPHA);
-    // For some reason the transparency of the pixel works only if a piece is on a cell
     for (auto m: selectedPiece->getMoves(engine))
     {
         FillRect(
@@ -134,6 +136,22 @@ void    ChessInterface::drawAvailableCells()
             CELL_SIZE,
             CELL_SIZE,
             olc::Pixel(219, 136, 11, 120)
+        );
+    }
+    SetPixelMode(olc::Pixel::NORMAL);
+}
+
+void    ChessInterface::drawAttackedCells()
+{
+    SetPixelMode(olc::Pixel::ALPHA);
+    for (auto &p: engine->getAttackedSquares())
+    {
+        FillRect(
+            p.x * CELL_SIZE,
+            p.y * CELL_SIZE,
+            CELL_SIZE,
+            CELL_SIZE,
+            olc::Pixel(255, 30, 30, 150)
         );
     }
     SetPixelMode(olc::Pixel::NORMAL);

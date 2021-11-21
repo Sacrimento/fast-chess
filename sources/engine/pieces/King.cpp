@@ -1,24 +1,20 @@
 #include "King.h"
 
-std::list<Move>    King::getMoves(ChessEngine *engine)
+std::list<Move>    King::getMoves(ChessEngine *engine, bool allAttackedSquares)
 {
     std::list<Move> moves;
     Piece *target = nullptr;
+    auto attacked = engine->getAttackedSquares();
+    pos2d targetSquare;
 
     for (int8_t xmove : {-1, 1, 0}) {
         for (int8_t ymove : {-1, 1, 0}) {
-            if (isMoveLegal(engine, xmove, ymove)) {
+            targetSquare = { (int8_t)(pos.x + xmove), (int8_t)(pos.y + ymove) };
+            if (isMoveLegal(engine, xmove, ymove, allAttackedSquares) &&
+                std::find_if(attacked.cbegin(), attacked.cend(), [targetSquare] (const pos2d &pos) { return targetSquare == pos; }) == attacked.cend())
+            {
                 target = engine->getPieceFromPos({(int8_t)(pos.x + xmove), (int8_t)(pos.y + ymove)});
-                if (target)
-                { /* TODO: Check if capture is possible, king can't take a protected piece */ }
-                moves.push_back({
-                    this,
-                    {
-                        (int8_t)(pos.x + xmove),
-                        (int8_t)(pos.y + ymove)
-                    },
-                    target
-                });
+                moves.push_back({this, targetSquare, target});
             }
         }
     }
@@ -44,6 +40,8 @@ std::list<Move>    King::getMoves(ChessEngine *engine)
 bool    King::checkCastle(ChessEngine *engine, int8_t xoffset)
 {
     auto piece = engine->getPieceFromPos({(int8_t)(pos.x + xoffset), pos.y});
+    auto attacked = engine->getAttackedSquares();
+    pos2d p;
 
     if (!piece || piece->getType() != Type::ROOK)
         return false;
@@ -51,7 +49,13 @@ bool    King::checkCastle(ChessEngine *engine, int8_t xoffset)
         return false;
     if (engine->isPathObstructed(this, (xoffset > 0 ? 1 : -1), 0, std::abs(xoffset) - 1))
         return false;
-    // TODO: Check if king goes through check
+    for (int8_t i = (xoffset > 0 ? 1 : -1); i < std::abs(xoffset); (xoffset > 0 ? ++i : --i))
+    {
+        p = {(int8_t)(pos.x + i), pos.y};
+        if (std::find_if(attacked.cbegin(), attacked.cend(), [p] (const pos2d &pos) { return p == pos; }) != attacked.cend())
+            // Castle is illegal, king would be in check
+            return false;
+    }
     return true;
 }
 

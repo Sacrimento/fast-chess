@@ -46,6 +46,7 @@ class ChessEngine
         ~ChessEngine();
 
         std::list<Piece *> pieces;
+        std::list<Piece::pos2d> attackedSquares;
 
         void    setPromotionType(Piece::Type t);
 
@@ -53,6 +54,7 @@ class ChessEngine
         Move    &getLastMove();
         State   getState() { return state; }
         Piece::Color    getTurn();
+        std::list<Piece::pos2d> &getAttackedSquares();
 
         void    move(Piece *piece, Piece::pos2d pos);
         bool    isPathObstructed(Piece *piece, int8_t incx, int8_t incy, uint8_t iterations);
@@ -70,6 +72,8 @@ class ChessEngine
         uint8_t fmCounter; //"fifty-move"
 
         void handleRookAfterCastle(const Move &m);
+
+        void computeAttackedSquares();
 
         void cleanup();
 

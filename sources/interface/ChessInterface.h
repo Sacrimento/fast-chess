@@ -5,6 +5,8 @@
 
 #include "ChessEngine.h"
 
+#define DEBUG 0
+
 #define CI_SCREEN_W 1280
 #define CI_SCREEN_H 720
 #define CELL_SIZE (CI_SCREEN_H / 8)
@@ -39,6 +41,7 @@ class ChessInterface : public olc::PixelGameEngine
 
         void    drawPieces();
         void    drawAvailableCells();
+        void    drawAttackedCells();
 
     public:
         ChessInterface(const char *window_name);

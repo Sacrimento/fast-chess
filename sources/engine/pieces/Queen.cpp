@@ -1,6 +1,6 @@
 #include "Queen.h"
 
-std::list<Move> Queen::getMoves(ChessEngine *engine)
+std::list<Move> Queen::getMoves(ChessEngine *engine, bool allAttackedSquares)
 {
     std::list<Move> moves;
     Piece *target = nullptr;
@@ -8,7 +8,7 @@ std::list<Move> Queen::getMoves(ChessEngine *engine)
     for (int8_t xmove : {-1, 1, 0}) {
         for (int8_t ymove : {-1, 1, 0}) {
             for (int8_t inc = 1 ; inc <= 7 ; ++inc) {
-                if (isMoveLegal(engine, xmove * inc, ymove * inc)) {
+                if (isMoveLegal(engine, xmove * inc, ymove * inc, allAttackedSquares)) {
                     target = engine->getPieceFromPos({(int8_t)(pos.x + xmove * inc), (int8_t)(pos.y + ymove * inc)});
                     moves.push_back({
                         this,

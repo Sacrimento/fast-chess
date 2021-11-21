@@ -9,5 +9,5 @@ class Knight : public Piece
         Knight(Color c, pos2d pos) : Piece(c, pos) { type = Type::KNIGHT; }
         ~Knight() {}
 
-        virtual std::list<Move> getMoves(ChessEngine *engine);
+        virtual std::list<Move> getMoves(ChessEngine *engine, bool allAttackedSquares = false);
 };

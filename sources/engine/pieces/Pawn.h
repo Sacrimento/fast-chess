@@ -9,7 +9,7 @@ class Pawn : public Piece
         Pawn(Color c, pos2d pos) : Piece(c, pos) { type = Type::PAWN; }
         ~Pawn() {}
 
-        virtual std::list<Move> getMoves(ChessEngine *engine);
+        virtual std::list<Move> getMoves(ChessEngine *engine, bool allAttackedSquares = false);
         void    move(pos2d move);
 
     private:

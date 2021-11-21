@@ -8,11 +8,17 @@ bool    Piece::isMoveOnBoard(int8_t x, int8_t y) {
     );
 }
 
-bool    Piece::canCapture(Piece *p) {
+bool    Piece::canCapture(Piece *p, bool allowOwnPieceAttack) {
+    if (allowOwnPieceAttack)
+        return p->getType() != Piece::Type::KING;
     return p->getColor() != color && p->getType() != Piece::Type::KING;
 }
 
-bool    Piece::isMoveLegal(ChessEngine *engine, int8_t x, int8_t y, bool mustCapture, bool canMoveCapture) {
+bool    Piece::isMoveLegal(ChessEngine *engine, int8_t x, int8_t y, bool allowOwnPieceAttack, bool mustCapture, bool canMoveCapture) {
+    // allowOwnPieceAttack => Useful for attackedSquares generations and king movement, to check if a piece is protected
+    // mustCapture => Useful for pawns movement, target square must not be empty and must be captured
+    // canCapture => Useful for pawns movement, allow capture on the target square
+
     if (!isMoveOnBoard(x, y))
         return false;
 
@@ -22,7 +28,7 @@ bool    Piece::isMoveLegal(ChessEngine *engine, int8_t x, int8_t y, bool mustCap
         return false;
 
     if (p)
-        return canCapture(p);
+        return canCapture(p, allowOwnPieceAttack);
 
     return true;
 }

@@ -36,7 +36,7 @@ class Piece
         Piece(Color c, pos2d p) : color(c), pos(p) {}
         virtual ~Piece() {}
 
-        virtual std::list<Move> getMoves(ChessEngine *engine) = 0;
+        virtual std::list<Move> getMoves(ChessEngine *engine, bool allAttackedSquares = false) = 0;
         pos2d   getPos() { return pos; }
         Color   getColor() { return color; }
         Type    getType() { return type; }
@@ -51,8 +51,8 @@ class Piece
         Color   color;
 
         bool    isMoveOnBoard(int8_t x, int8_t y);
-        bool    canCapture(Piece *p);
-        bool    isMoveLegal(ChessEngine *engine, int8_t x, int8_t y, bool mustCatpure = false, bool canMoveCapture = true);
+        bool    canCapture(Piece *p, bool allowOwnPieceAttack);
+        bool    isMoveLegal(ChessEngine *engine, int8_t x, int8_t y, bool allowOwnPieceAttack, bool mustCatpure = false, bool canMoveCapture = true);
 };
 
 bool    operator==(const Piece::pos2d &lhs, const Piece::pos2d &rhs);

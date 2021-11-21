@@ -19,6 +19,8 @@ void ChessEngine::cleanup()
 {
     // Clean every state of the game
 
+    attackedSquares.clear();
+
     for (auto &p: pieces)
         delete p;
 }
@@ -53,6 +55,11 @@ Move   &ChessEngine::getLastMove()
 Piece::Color    ChessEngine::getTurn()
 {
     return turn;
+}
+
+std::list<Piece::pos2d> &ChessEngine::getAttackedSquares()
+{
+    return attackedSquares;
 }
 
 bool    ChessEngine::isPathObstructed(Piece *piece, int8_t incx, int8_t incy, uint8_t iterations)
@@ -107,6 +114,8 @@ void    ChessEngine::move(Piece *piece, Piece::pos2d pos)
         fmCounter = 0;
     }
 
+    computeAttackedSquares();
+
     turn = (Piece::Color)(Piece::Color::WHITE - turn); // Flips turn between BLACK and WHITE thanks to their numeric values
     lastMove = *m;
     if (fmCounter == 50) state = DRAW;
@@ -126,6 +135,21 @@ void ChessEngine::loadFEN(std::string fen)
     pieces = position.pieces;
     turn = (position.turn == 'w' ? Piece::Color::WHITE : Piece::Color::BLACK);
     fmCounter = position.fmCounter;
+}
+
+void ChessEngine::computeAttackedSquares()
+{
+    attackedSquares.clear();
+
+    // Compute all vector for ray pieces
+
+    for (auto &p : pieces)
+    {
+        if (p->getColor() != turn)
+            continue;
+        for (auto &m : p->getMoves(this, true))
+            attackedSquares.push_back(m.pos);
+    }
 }
 
 void ChessEngine::setPromotionType(Piece::Type t)

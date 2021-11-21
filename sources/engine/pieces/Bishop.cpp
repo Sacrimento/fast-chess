@@ -1,6 +1,6 @@
 #include "Bishop.h"
 
-std::list<Move>    Bishop::getMoves(ChessEngine *engine)
+std::list<Move>    Bishop::getMoves(ChessEngine *engine, bool allAttackedSquares)
 {
     std::list<Move> moves;
     std::list<pos2d> possibleMoves = {
@@ -13,7 +13,7 @@ std::list<Move>    Bishop::getMoves(ChessEngine *engine)
 
     for (auto mv : possibleMoves) {
         for (int8_t inc = 1 ; inc <= 7 ; ++inc) {
-            if (isMoveLegal(engine, mv.x * inc, mv.y * inc)) {
+            if (isMoveLegal(engine, mv.x * inc, mv.y * inc, allAttackedSquares)) {
                 target = engine->getPieceFromPos({(int8_t)(pos.x + mv.x * inc), (int8_t)(pos.y + mv.y * inc)});
                 moves.push_back({this, {(int8_t)(pos.x + mv.x * inc), (int8_t)(pos.y + mv.y * inc)}, target});
                 if (target)

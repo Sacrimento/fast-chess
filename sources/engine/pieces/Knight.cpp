@@ -1,6 +1,6 @@
 #include "Knight.h"
 
-std::list<Move>    Knight::getMoves(ChessEngine *engine)
+std::list<Move>    Knight::getMoves(ChessEngine *engine, bool allAttackedSquares)
 {
     std::list<Move> moves;
     std::list<pos2d> possibleMoves = {
@@ -15,7 +15,7 @@ std::list<Move>    Knight::getMoves(ChessEngine *engine)
     };
 
     for (auto mv: possibleMoves)
-        if (isMoveLegal(engine, mv.x, mv.y))
+        if (isMoveLegal(engine, mv.x, mv.y, allAttackedSquares))
             moves.push_back(
             {
                 this, {(int8_t)(pos.x + mv.x), (int8_t)(pos.y + mv.y)},
