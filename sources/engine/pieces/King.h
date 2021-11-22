@@ -13,7 +13,7 @@ class King : public Piece
         void    move(pos2d move) override;
 
         bool    canCastle = false;
-    
+
     private:
         bool    checkCastle(ChessEngine *engine, int8_t xoffset);
 };

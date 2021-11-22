@@ -28,16 +28,16 @@ bool    Piece::canStopCheck(ChessEngine *engine, Piece *checkingPiece, int8_t x,
 
     // Check if moving to the square would block the check to our king
     Piece *king = *std::find_if(engine->pieces.begin(), engine->pieces.end(), [this] (Piece *p) { return p->getPieceRepresentation() == (Piece::Type::KING | color);});
-    // Check if our move is on the segment checkingPiece -> king
-    auto x1 = checkingPiece->getPos().x, x2 = king->getPos().x, x3 = pos.x;
-    auto y1 = checkingPiece->getPos().y, y2 = king->getPos().y, y3 = pos.y;
+    // Check if our move is on the segment checkingPiece -> king, and would block the check
+    auto x1 = checkingPiece->getPos().x, x2 = king->getPos().x, x3 = (int8_t)(pos.x + x);
+    auto y1 = checkingPiece->getPos().y, y2 = king->getPos().y, y3 = (int8_t)(pos.y + y);
 
     if (x1 == x2)
         return (x3 == x2 && (y1 <= y3 <= y2));
 
-    auto slope = (y2 - y1) / (x2 - x1);
-    bool isAligned = (y3 - y1) == slope * (x3 - x1);
-    bool isBetween = (std::min(x1, x2) <= x3 <= std::max(x1, x2)) && (std::min(y1, y2) <= y3 <= std::max(y1, y2));
+    auto slope = ((y2 - y1) / (x2 - x1));
+    bool isAligned = ((y3 - y1) == slope * (x3 - x1));
+    bool isBetween = ((std::min(x1, x2) <= x3 <= std::max(x1, x2)) && (std::min(y1, y2) <= y3 <= std::max(y1, y2)));
 
     return isAligned && isBetween;
 }
@@ -56,7 +56,7 @@ bool    Piece::isMoveLegal(ChessEngine *engine, int8_t x, int8_t y, bool allowOw
     if (!isMoveOnBoard(x, y))
         return false;
 
-    if (checkingPieces.size())
+    if (checkingPieces.size() && type != Type::KING)
         return canStopCheck(engine, checkingPieces.front(), x, y);
 
     Piece *p = engine->getPieceFromPos({(int8_t)(pos.x + x), (int8_t)(pos.y + y)});
