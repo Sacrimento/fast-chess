@@ -52,8 +52,9 @@ class ChessEngine
         Piece           *getPieceFromPos(Piece::pos2d pos);
         Move            &getLastMove();
         State           getState() { return state; }
-        Piece::Color    getTurn();
         std::map<Piece *, std::list<Piece::pos2d>>  &getAttackedSquares();
+        std::list<Piece *>  &getCheckingPieces();
+        Piece::Color    getTurn();
 
         void    move(Piece *piece, Piece::pos2d pos);
         bool    isPathObstructed(Piece *piece, int8_t incx, int8_t incy, uint8_t iterations);

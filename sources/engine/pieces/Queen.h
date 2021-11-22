@@ -10,4 +10,7 @@ class Queen : public Piece
         ~Queen() {}
 
         virtual std::list<Move> getMoves(ChessEngine *engine, bool allAttackedSquares = false);
+
+    private:
+        bool    ray = true;
 };

@@ -10,4 +10,7 @@ class Bishop : public Piece
         ~Bishop() {}
 
         virtual std::list<Move> getMoves(ChessEngine *engine, bool allAttackedSquares = false);
+
+    private:
+        bool    ray = true;
 };

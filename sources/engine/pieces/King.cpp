@@ -12,8 +12,8 @@ std::list<Move>    King::getMoves(ChessEngine *engine, bool allAttackedSquares)
             targetSquare = { (int8_t)(pos.x + xmove), (int8_t)(pos.y + ymove) };
             if (isMoveLegal(engine, xmove, ymove, allAttackedSquares) && !engine->isSquareAttacked(targetSquare))
             {
-                        target = engine->getPieceFromPos({(int8_t)(pos.x + xmove), (int8_t)(pos.y + ymove)});
-                        moves.push_back({this, targetSquare, target});
+                target = engine->getPieceFromPos({(int8_t)(pos.x + xmove), (int8_t)(pos.y + ymove)});
+                moves.push_back({this, targetSquare, target});
             }
         }
     }
@@ -39,7 +39,6 @@ std::list<Move>    King::getMoves(ChessEngine *engine, bool allAttackedSquares)
 bool    King::checkCastle(ChessEngine *engine, int8_t xoffset)
 {
     auto piece = engine->getPieceFromPos({(int8_t)(pos.x + xoffset), pos.y});
-    auto attacked = engine->getAttackedSquares();
     pos2d p;
 
     if (!piece || piece->getType() != Type::ROOK)

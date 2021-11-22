@@ -13,4 +13,7 @@ class Rook : public Piece
         void    move(pos2d move) override;
 
         bool canCastle = false;
+
+    private:
+        bool    ray = true;
 };

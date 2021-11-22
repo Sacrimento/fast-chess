@@ -49,7 +49,10 @@ class Piece
         pos2d   pos;
         Type    type;
         Color   color;
+        bool    ray = false;
 
+        bool    isRay();
+        bool    canStopCheck(ChessEngine *engine, Piece *checkingPiece, int8_t x, int8_t y);
         bool    isMoveOnBoard(int8_t x, int8_t y);
         bool    canCapture(Piece *p, bool allowOwnPieceAttack);
         bool    isMoveLegal(ChessEngine *engine, int8_t x, int8_t y, bool allowOwnPieceAttack, bool mustCatpure = false, bool canMoveCapture = true);

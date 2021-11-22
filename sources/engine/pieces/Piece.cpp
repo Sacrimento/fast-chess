@@ -1,6 +1,11 @@
 #include "Piece.h"
 #include "ChessEngine.h"
 
+bool    Piece::isRay()
+{
+    return ray;
+}
+
 bool    Piece::isMoveOnBoard(int8_t x, int8_t y) {
     return (
         pos.x + x < 8 && pos.x + x >= 0
@@ -12,13 +17,47 @@ bool    Piece::canCapture(Piece *p, bool allowOwnPieceAttack) {
     return (allowOwnPieceAttack || p->getColor() != color);
 }
 
+bool    Piece::canStopCheck(ChessEngine *engine, Piece *checkingPiece, int8_t x, int8_t y)
+{
+    // Can capture the piece ?
+    if (checkingPiece->getPos() == pos2d{(int8_t)(pos.x + x), (int8_t)(pos.y + y)})
+        return true;
+
+    if (type == Type::KING || !checkingPiece->isRay())
+        return false;
+
+    // Check if moving to the square would block the check to our king
+    Piece *king = *std::find_if(engine->pieces.begin(), engine->pieces.end(), [this] (Piece *p) { return p->getPieceRepresentation() == (Piece::Type::KING | color);});
+    // Check if our move is on the segment checkingPiece -> king
+    auto x1 = checkingPiece->getPos().x, x2 = king->getPos().x, x3 = pos.x;
+    auto y1 = checkingPiece->getPos().y, y2 = king->getPos().y, y3 = pos.y;
+
+    if (x1 == x2)
+        return (x3 == x2 && (y1 <= y3 <= y2));
+
+    auto slope = (y2 - y1) / (x2 - x1);
+    bool isAligned = (y3 - y1) == slope * (x3 - x1);
+    bool isBetween = (std::min(x1, x2) <= x3 <= std::max(x1, x2)) && (std::min(y1, y2) <= y3 <= std::max(y1, y2));
+
+    return isAligned && isBetween;
+}
+
 bool    Piece::isMoveLegal(ChessEngine *engine, int8_t x, int8_t y, bool allowOwnPieceAttack, bool mustCapture, bool canMoveCapture) {
     // allowOwnPieceAttack => Useful for attackedSquares generations and king movement, to check if a piece is protected
     // mustCapture => Useful for pawns movement, target square must not be empty and must be captured
     // canCapture => Useful for pawns movement, allow capture on the target square
 
+    auto checkingPieces = engine->getCheckingPieces();
+
+    // If king is checked by more than one piece, it *needs* to move out
+    if (checkingPieces.size() > 1 && type != Type::KING)
+        return false;
+
     if (!isMoveOnBoard(x, y))
         return false;
+
+    if (checkingPieces.size())
+        return canStopCheck(engine, checkingPieces.front(), x, y);
 
     Piece *p = engine->getPieceFromPos({(int8_t)(pos.x + x), (int8_t)(pos.y + y)});
 

@@ -62,6 +62,11 @@ std::map<Piece *, std::list<Piece::pos2d>> &ChessEngine::getAttackedSquares()
     return attackedSquares;
 }
 
+std::list<Piece *>  &ChessEngine::getCheckingPieces()
+{
+    return checkingPieces;
+}
+
 bool    ChessEngine::isPathObstructed(Piece *piece, int8_t incx, int8_t incy, uint8_t iterations)
 {
     uint8_t i = 0;
