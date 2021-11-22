@@ -41,6 +41,13 @@ class ChessEngine
             B_WIN,
         };
 
+        enum MoveType {
+            CANCELLED,
+            REGULAR,
+            CHECK,
+            CAPTURE,
+        };
+
         ChessEngine();
         ChessEngine(const char *fen);
         ~ChessEngine();
@@ -52,15 +59,15 @@ class ChessEngine
         Piece           *getPieceFromPos(Piece::pos2d pos);
         Move            &getLastMove();
         State           getState() { return state; }
-        std::map<Piece *, std::list<Piece::pos2d>>  &getAttackedSquares();
-        std::list<Piece *>  &getCheckingPieces();
         Piece::Color    getTurn();
+        std::list<Piece *>  &getCheckingPieces();
+        std::map<Piece *, std::list<Piece::pos2d>>  &getAttackedSquares();
 
-        void    move(Piece *piece, Piece::pos2d pos);
-        bool    isPathObstructed(Piece *piece, int8_t incx, int8_t incy, uint8_t iterations);
-        bool    isSquareAttacked(Piece::pos2d &pos);
+        MoveType    move(Piece *piece, Piece::pos2d pos);
+        bool        isPathObstructed(Piece *piece, int8_t incx, int8_t incy, uint8_t iterations);
+        bool        isSquareAttacked(Piece::pos2d &pos);
 
-        void    loadFEN(std::string fen);
+        void        loadFEN(std::string fen);
         static Piece    *createPiece(Piece::Type type, Piece::Color color, Piece::pos2d pos);
 
     private:

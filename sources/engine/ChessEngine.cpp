@@ -84,10 +84,10 @@ bool    ChessEngine::isPathObstructed(Piece *piece, int8_t incx, int8_t incy, ui
     return false;
 }
 
-void    ChessEngine::move(Piece *piece, Piece::pos2d pos)
+ChessEngine::MoveType   ChessEngine::move(Piece *piece, Piece::pos2d pos)
 {
     if (piece->getColor() != turn || state != State::INGAME)
-        return;
+        return MoveType::CANCELLED;
 
     auto moves = piece->getMoves(this);
     std::list<Move>::const_iterator m;
@@ -95,7 +95,7 @@ void    ChessEngine::move(Piece *piece, Piece::pos2d pos)
     if ((m = std::find_if(moves.cbegin(), moves.cend(),
         [pos] (const Move &m) { return m.pos == pos; })) == moves.end())
         //Move illegal
-        return;
+        return MoveType::CANCELLED;
 
     if (m->flag == Move::Flag::Castle)
         handleRookAfterCastle(*m);
@@ -118,20 +118,20 @@ void    ChessEngine::move(Piece *piece, Piece::pos2d pos)
         fmCounter = 0;
     }
 
+    if (fmCounter == 50)
+        state = DRAW;
+
     // Compute attacked squares by the player that just moved
     computeAttackedSquares();
     turn = (Piece::Color)(Piece::Color::WHITE - turn); // Flips turn between BLACK and WHITE thanks to their numeric values
     // Check if the enemy King is in check
     updateEnemyKingStatus();
+    lastMove = *m;
 
     if (!checkingPieces.empty())
-    {
-        for (auto &p : checkingPieces)
-            std::cout << (turn == Piece::Color::WHITE ? "White" : "Black") << " king is checked by " << p->getPos() << std::endl;
-    }
+        return MoveType::CHECK;
 
-    lastMove = *m;
-    if (fmCounter == 50) state = DRAW;
+    return (lastMove.captured ? MoveType::CAPTURE : MoveType::REGULAR);
 }
 
 void ChessEngine::updateEnemyKingStatus()

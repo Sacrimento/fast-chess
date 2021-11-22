@@ -113,8 +113,9 @@ bool    ChessInterface::handleUserInput()
             return true;
         }
         if (selectedPiece) {
-            engine->move(selectedPiece, {(int8_t)cell.x, (int8_t)cell.y});
-            olc::SOUND::PlaySample(sMove);
+            auto mt = engine->move(selectedPiece, {(int8_t)cell.x, (int8_t)cell.y});
+            if (mt != ChessEngine::MoveType::CANCELLED)
+                olc::SOUND::PlaySample(sounds[mt]);
         }
         selectedPiece = nullptr;
     }
@@ -178,8 +179,9 @@ bool    ChessInterface::loadAssets()
     ALLOC_SPRITE("./assets/chess.com/wking.png", Piece::Type::KING | Piece::Color::WHITE)
     ALLOC_SPRITE("./assets/chess.com/bking.png", Piece::Type::KING | Piece::Color::BLACK)
 
-    sMove = olc::SOUND::LoadAudioSample("./assets/sounds/move.wav");
-    sDraw = olc::SOUND::LoadAudioSample("./assets/sounds/draw.wav");
+    sounds[ChessEngine::MoveType::REGULAR] = olc::SOUND::LoadAudioSample("./assets/sounds/move.wav");
+    sounds[ChessEngine::MoveType::CAPTURE] = olc::SOUND::LoadAudioSample("./assets/sounds/capture.wav");
+    sounds[ChessEngine::MoveType::CHECK] = olc::SOUND::LoadAudioSample("./assets/sounds/draw.wav");
 
     pieceSize = pieceDecals[Piece::Type::QUEEN | Piece::Color::WHITE]->sprite->height;
     pieceScaling = ScreenHeight() / 8 / pieceSize;

@@ -21,14 +21,13 @@ class ChessInterface : public olc::PixelGameEngine
         int     pieceLayer;
         float   pieceSize;
         float   pieceScaling;
-        int     sMove;
-        int     sDraw;
 
         Piece   *selectedPiece = nullptr;
 
         ChessEngine *engine = nullptr;
 
-        std::map<uint8_t, olc::Decal *> pieceDecals;
+        std::map<ChessEngine::MoveType, int>    sounds;
+        std::map<uint8_t, olc::Decal *>         pieceDecals;
 
         bool    OnUserCreate() override;
         bool    OnUserUpdate(float fElapsedTime) override;
