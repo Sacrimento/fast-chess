@@ -33,11 +33,11 @@ bool    Piece::canStopCheck(ChessEngine *engine, Piece *checkingPiece, int8_t x,
     auto y1 = checkingPiece->getPos().y, y2 = king->getPos().y, y3 = (int8_t)(pos.y + y);
 
     if (x1 == x2)
-        return (x3 == x2 && (y1 <= y3 <= y2));
+        return (x3 == x2 && (y1 < y3 && y3 < y2));
 
     auto slope = ((y2 - y1) / (x2 - x1));
     bool isAligned = ((y3 - y1) == slope * (x3 - x1));
-    bool isBetween = ((std::min(x1, x2) <= x3 <= std::max(x1, x2)) && (std::min(y1, y2) <= y3 <= std::max(y1, y2)));
+    bool isBetween = ((std::min(x1, x2) < x3 && x3 < std::max(x1, x2)) && (std::min(y1, y2) < y3 && y3 < std::max(y1, y2)));
 
     return isAligned && isBetween;
 }
@@ -56,16 +56,16 @@ bool    Piece::isMoveLegal(ChessEngine *engine, int8_t x, int8_t y, bool allowOw
     if (!isMoveOnBoard(x, y))
         return false;
 
-    if (checkingPieces.size() && type != Type::KING)
-        return canStopCheck(engine, checkingPieces.front(), x, y);
-
     Piece *p = engine->getPieceFromPos({(int8_t)(pos.x + x), (int8_t)(pos.y + y)});
 
     if (mustCapture && !p || !canMoveCapture && p)
         return false;
 
-    if (p)
-        return canCapture(p, allowOwnPieceAttack);
+    if (p && !canCapture(p, allowOwnPieceAttack))
+        return false;
+
+    if (!checkingPieces.empty())
+        return canStopCheck(engine, checkingPieces.front(), x, y);
 
     return true;
 }
