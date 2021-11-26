@@ -49,7 +49,7 @@ bool    King::checkCastle(ChessEngine *engine, int8_t xoffset)
         return false;
     if (engine->isPathObstructed(this, (xoffset > 0 ? 1 : -1), 0, std::abs(xoffset) - 1))
         return false;
-    for (int8_t i = (xoffset > 0 ? 1 : -1); i < std::abs(xoffset); (xoffset > 0 ? ++i : --i))
+    for (int8_t i = 0; i < std::abs(xoffset); (xoffset > 0 ? ++i : --i))
     {
         p = {(int8_t)(pos.x + i), pos.y};
         if (engine->isSquareAttacked(p))
