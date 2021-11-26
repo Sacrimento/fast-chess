@@ -10,9 +10,9 @@ std::list<Move>    Rook::getMoves(ChessEngine *engine, bool allAttackedSquares)
             if (isMoveLegal(engine, xmove * inc, 0, allAttackedSquares)) {
                 target = engine->getPieceFromPos({(int8_t)(pos.x + xmove * inc), pos.y});
                 moves.push_back({this, {(int8_t)(pos.x + xmove * inc), pos.y}, target});
-                if (target)
-                    break;
+                if (target && !(allAttackedSquares && target->getType() == Type::KING))
                     // Means we will make a capture, so dont check further than this piece
+                    break;
             }
             else
                 break;
@@ -24,9 +24,9 @@ std::list<Move>    Rook::getMoves(ChessEngine *engine, bool allAttackedSquares)
             if (isMoveLegal(engine, 0, ymove * inc, allAttackedSquares)) {
                 target = engine->getPieceFromPos({pos.x, (int8_t)(pos.y + ymove * inc)});
                 moves.push_back({this, {pos.x, (int8_t)(pos.y + ymove * inc)}, target});
-                if (target)
-                    break;
+                if (target && !(allAttackedSquares && target->getType() == Type::KING))
                     // Means we will make a capture, so dont check further than this piece
+                    break;
             }
             else
                 break;

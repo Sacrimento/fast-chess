@@ -20,10 +20,11 @@ bool    Piece::canCapture(Piece *p, bool allowOwnPieceAttack) {
 bool    Piece::canStopCheck(ChessEngine *engine, Piece *checkingPiece, int8_t x, int8_t y)
 {
     // Can capture the piece ?
-    if (checkingPiece->getPos() == pos2d{(int8_t)(pos.x + x), (int8_t)(pos.y + y)})
+    if (type == Type::KING || checkingPiece->getPos() == pos2d{(int8_t)(pos.x + x), (int8_t)(pos.y + y)})
         return true;
 
-    if (type == Type::KING || !checkingPiece->isRay())
+    // You can't block if the piece is not a rook/queen/bishop
+    if (!checkingPiece->isRay())
         return false;
 
     // Check if moving to the square would block the check to our king
@@ -33,7 +34,7 @@ bool    Piece::canStopCheck(ChessEngine *engine, Piece *checkingPiece, int8_t x,
     auto y1 = checkingPiece->getPos().y, y2 = king->getPos().y, y3 = (int8_t)(pos.y + y);
 
     if (x1 == x2)
-        return (x3 == x2 && (y1 < y3 && y3 < y2));
+        return (x3 == x2 && (std::min(y1, y2) < y3 && y3 < std::max(y1, y2)));
 
     auto slope = ((y2 - y1) / (x2 - x1));
     bool isAligned = ((y3 - y1) == slope * (x3 - x1));

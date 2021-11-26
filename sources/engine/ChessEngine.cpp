@@ -164,8 +164,6 @@ void ChessEngine::computeAttackedSquares()
 {
     attackedSquares.clear();
 
-    // Compute all vector for ray pieces
-
     for (auto &p : pieces)
     {
         std::list<Piece::pos2d> attacked;

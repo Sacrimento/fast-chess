@@ -16,7 +16,7 @@ std::list<Move>    Bishop::getMoves(ChessEngine *engine, bool allAttackedSquares
             if (isMoveLegal(engine, mv.x * inc, mv.y * inc, allAttackedSquares)) {
                 target = engine->getPieceFromPos({(int8_t)(pos.x + mv.x * inc), (int8_t)(pos.y + mv.y * inc)});
                 moves.push_back({this, {(int8_t)(pos.x + mv.x * inc), (int8_t)(pos.y + mv.y * inc)}, target});
-                if (target)
+                if (target && !(allAttackedSquares && target->getType() == Type::KING))
                     // Means we will make a capture, so dont check further than this piece
                     break;
             }

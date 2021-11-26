@@ -9,6 +9,8 @@ std::list<Move>    King::getMoves(ChessEngine *engine, bool allAttackedSquares)
 
     for (int8_t xmove : {-1, 1, 0}) {
         for (int8_t ymove : {-1, 1, 0}) {
+            if (xmove == 0 && ymove == 0)
+                continue;
             targetSquare = { (int8_t)(pos.x + xmove), (int8_t)(pos.y + ymove) };
             if (isMoveLegal(engine, xmove, ymove, allAttackedSquares) && !engine->isSquareAttacked(targetSquare))
             {
