@@ -18,8 +18,8 @@ bool    ChessInterface::OnUserCreate()
     for (int x = 0; x < 8; x++)
         for (int y = 0; y < 8; y++)
             FillRect(
-                x * CELL_SIZE,
-                y * CELL_SIZE,
+                x * CELL_SIZE + MARGIN_W,
+                y * CELL_SIZE + MARGIN_H,
                 CELL_SIZE,
                 CELL_SIZE,
                 ((x + y) % 2 ? black : white)
@@ -32,9 +32,12 @@ bool    ChessInterface::OnUserCreate()
     SetDrawTarget(pieceLayer);
     EnableLayer(pieceLayer, true);
 
+    buttonLayer = CreateLayer();
+    EnableLayer(boardLayer, true); // Is it necessary tho ?
+
     olc::SOUND::InitialiseAudio();
 
-    if (!loadAssets())
+    if (!loadAssets() || !loadButtons())
         return false;
 
     return true;
@@ -49,7 +52,7 @@ void    ChessInterface::drawPieces() {
         {
             pos = p->getPos();
             DrawDecal(
-                {float(pos.x) * float(CELL_SIZE), float(pos.y) * float(CELL_SIZE)},
+                {float(pos.x) * float(CELL_SIZE) + float(MARGIN_W), float(pos.y) * float(CELL_SIZE) + float(MARGIN_H)},
                 pieceDecals[p->getPieceRepresentation()],
                 {pieceScaling, pieceScaling}
             );
@@ -81,6 +84,9 @@ bool    ChessInterface::OnUserUpdate(float fElapsedTime)
 #endif
     drawAvailableCells();
 
+    if(buttons["test"].isShown)
+        drawButton(buttons["test"]);
+
     SetDrawTarget(nullptr);
 
     return true;
@@ -107,6 +113,11 @@ bool    ChessInterface::handleUserInput()
         selectedPiece = engine->getPieceFromPos({(int8_t)cell.x, (int8_t)cell.y});
     else if (GetMouse(0).bReleased)
     {
+        if (!selectedPiece && cell.x>=9 && cell.y>=3 && cell.x<11 && cell.y<5 && buttons["test"].isShown) {
+            buttons["test"].buttonFct();
+            buttons["test"].isShown = False;
+            //removeButton();
+        }
         if (cell.x > 7 || cell.y > 7)
         {
             selectedPiece = nullptr;
@@ -116,7 +127,10 @@ bool    ChessInterface::handleUserInput()
             auto mt = engine->move(selectedPiece, {(int8_t)cell.x, (int8_t)cell.y});
             if (mt != ChessEngine::MoveType::CANCELLED)
                 olc::SOUND::PlaySample(sounds[mt]);
+            else
+                buttons["test"].isShown= True;
         }
+
         selectedPiece = nullptr;
     }
 
@@ -132,8 +146,8 @@ void    ChessInterface::drawAvailableCells()
     for (auto m: selectedPiece->getMoves(engine))
     {
         FillRect(
-            m.pos.x * CELL_SIZE,
-            m.pos.y * CELL_SIZE,
+            m.pos.x * CELL_SIZE + MARGIN_W,
+            m.pos.y * CELL_SIZE + MARGIN_H,
             CELL_SIZE,
             CELL_SIZE,
             olc::Pixel(219, 136, 11, 120)
@@ -148,8 +162,8 @@ void    ChessInterface::drawAttackedCells()
     for (auto &p: engine->getAttackedSquares())
         for (auto &pos : p.second)
             FillRect(
-                pos.x * CELL_SIZE,
-                pos.y * CELL_SIZE,
+                pos.x * CELL_SIZE + MARGIN_W,
+                pos.y * CELL_SIZE + MARGIN_H,
                 CELL_SIZE,
                 CELL_SIZE,
                 olc::Pixel(255, 30, 30, 150)
@@ -159,7 +173,8 @@ void    ChessInterface::drawAttackedCells()
 
 olc::vi2d   ChessInterface::getCellFromMouse(const olc::vi2d mousePos)
 {
-    return mousePos / CELL_SIZE;
+    olc::vi2d pos = {(mousePos.x - MARGIN_W)/ CELL_SIZE , (mousePos.y - MARGIN_H)/ CELL_SIZE};
+    return pos;
 }
 
 bool    ChessInterface::loadAssets()
@@ -184,7 +199,39 @@ bool    ChessInterface::loadAssets()
     sounds[ChessEngine::MoveType::CHECK] = olc::SOUND::LoadAudioSample("./assets/sounds/draw.wav");
 
     pieceSize = pieceDecals[Piece::Type::QUEEN | Piece::Color::WHITE]->sprite->height;
-    pieceScaling = ScreenHeight() / 8 / pieceSize;
+    pieceScaling = BOARD_H / 8 / pieceSize;
 
     return true;
+}
+
+ChessInterface::Button  ChessInterface::createButton(uint8_t posx, uint8_t posy, uint8_t sizex, uint8_t sizey, void (*fction)()){
+    ChessInterface::Button b;
+    b.bInfo.posx = posx;
+    b.bInfo.posy = posy;
+    b.bInfo.sizex = sizex;
+    b.bInfo.sizey = sizey;
+    b.buttonFct = (*fction);
+    return b;
+}
+
+void    TestButton(){
+    std::cout << "Non abbiam bisogno di parole" << std::endl;
+}
+
+bool    ChessInterface::loadButtons() {
+    buttons["test"]= createButton(9,3,2,2, &TestButton);
+    return True;
+}
+
+void ChessInterface::drawButton(ChessInterface::Button b) {
+    //SetDrawTarget(buttonLayer);
+
+
+    FillRect(
+                b.bInfo.posx * CELL_SIZE + MARGIN_W,
+                b.bInfo.posy * CELL_SIZE + MARGIN_H,
+                b.bInfo.sizex * CELL_SIZE,
+                b.bInfo.sizey * CELL_SIZE,
+                olc::Pixel(255, 255, 255)
+            );
 }
